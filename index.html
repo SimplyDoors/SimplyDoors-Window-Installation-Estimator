@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SimplyDoors - Installation Estimator</title>
     <style>
+        /* --- BASE & SCREEN STYLES --- */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f0f2f5;
@@ -14,15 +15,14 @@
             font-size: 16px;
         }
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
             background: #fff;
-            padding: 15px;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         
-        /* Header & Customer Info */
         .app-header {
             text-align: center;
             border-bottom: 2px solid #0056b3;
@@ -32,13 +32,15 @@
         h1 {
             color: #0056b3;
             margin: 0 0 5px 0;
-            font-size: 1.8em;
+            font-size: 2em;
+            letter-spacing: -0.5px;
         }
         .header-subtext {
             color: #666;
-            font-size: 1em;
+            font-size: 0.9em;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            font-weight: 600;
         }
 
         .customer-info {
@@ -51,326 +53,147 @@
             border-radius: 8px;
             border: 1px solid #dee2e6;
         }
-        .info-group {
-            flex: 1;
-            min-width: 250px;
-        }
-        .info-group label {
-            display: block;
-            font-weight: bold;
-            font-size: 0.9em;
-            color: #555;
-            margin-bottom: 5px;
-        }
-        .info-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
+        .info-group { flex: 1; min-width: 200px; }
+        .info-group label { display: block; font-weight: bold; font-size: 0.85em; color: #555; margin-bottom: 6px; text-transform: uppercase; }
+        .info-group input { width: 100%; padding: 12px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; transition: border-color 0.2s; }
+        .info-group input:focus { border-color: #0056b3; outline: none; }
         
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 15px;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #dee2e6;
-            padding: 15px 10px;
-            text-align: left;
-            vertical-align: middle;
-        }
-        th {
-            background-color: #e9ecef;
-            font-weight: 600;
-        }
-        .category-cell {
-            font-size: 0.85em;
-            color: #666;
-            text-transform: uppercase;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 10px; }
+        th, td { border: 1px solid #dee2e6; padding: 15px 10px; text-align: left; vertical-align: middle; }
+        th { background-color: #e9ecef; font-weight: 600; color: #333; }
 
-        /* Inputs and Buttons */
         input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] {
-            -moz-appearance: textfield;
-            width: 50px;
-            height: 44px;
-            border: 2px solid #ccc;
-            border-left: none;
-            border-right: none;
-            border-radius: 0;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 0;
-            margin: 0;
-            background: #fff;
-            color: #333;
+            -moz-appearance: textfield; width: 50px; height: 44px; border: 2px solid #ccc;
+            border-left: none; border-right: none; border-radius: 0; text-align: center;
+            font-size: 18px; font-weight: bold; padding: 0; margin: 0; background: #fff; color: #333;
         }
-        input[type="number"]:focus {
-            outline: none;
-            background: #f8f9fa;
-        }
+        input[type="number"]:focus { outline: none; background: #eef6ff; }
 
-        .qty-control {
-            display: inline-flex;
-            align-items: center;
-            vertical-align: middle;
-        }
+        .qty-control { display: inline-flex; align-items: center; vertical-align: middle; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 6px; }
         .qty-btn {
-            width: 44px;
-            height: 48px;
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
+            width: 44px; height: 48px; background-color: #0056b3; color: white; border: none;
+            font-size: 24px; font-weight: bold; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; user-select: none; transition: background-color 0.1s;
         }
         .qty-btn:active { background-color: #004085; }
         .qty-btn-minus { border-radius: 6px 0 0 6px; }
         .qty-btn-plus { border-radius: 0 6px 6px 0; }
 
-        .readonly-qty-container {
-            display: inline-flex;
-            align-items: center;
-            height: 48px;
-            font-size: 1.1em;
-            color: #555;
-            vertical-align: middle;
-        }
-        .readonly-qty {
-            font-weight: bold;
-            color: #0056b3;
-            margin-left: 8px;
-            font-size: 1.2em;
-            background: #e9ecef;
-            padding: 6px 16px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-        
-        .price-calc {
-            display: inline-block;
-            color: #555;
-            white-space: nowrap;
-            vertical-align: middle;
-            margin-left: 12px;
-            font-size: 0.95em;
-        }
-        .price-calc b {
-            color: #0056b3;
-            display: inline-block;
-            min-width: 50px;
-            font-size: 1.1em;
-        }
-        .tube-text {
-            color: #888;
-            font-size: 0.85em;
-        }
+        .price-calc { display: inline-block; color: #555; white-space: nowrap; vertical-align: middle; margin-left: 12px; font-size: 0.95em; }
+        .price-calc b { color: #0056b3; display: inline-block; min-width: 50px; font-size: 1.1em; }
 
         .toggle-label {
-            display: inline-flex;
-            align-items: center;
-            background: #e9ecef;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            border: 2px solid #ccc;
-            user-select: none;
+            display: inline-flex; align-items: center; background: #fff; padding: 12px 20px;
+            border-radius: 8px; cursor: pointer; margin-top: 5px; border: 2px solid #ccc; user-select: none; font-size: 1.05em; transition: all 0.2s;
         }
-        .toggle-label input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-        .toggle-label:has(input:checked) {
-            background: #e3f2fd;
-            border-color: #0056b3;
-        }
+        .toggle-label input[type="checkbox"] { width: 24px; height: 24px; margin-right: 12px; cursor: pointer; }
+        .toggle-label:has(input:checked) { background: #eef6ff; border-color: #0056b3; }
 
-        .row-total {
-            font-weight: bold;
-            background-color: #f8f9fa;
-            font-size: 1.1em;
-            text-align: right;
-        }
-        .row-total-tubes {
-            font-size: 0.8em;
-            color: #666;
-            font-weight: normal;
-            display: block;
-            margin-top: 5px;
-        }
+        .row-total { font-weight: bold; background-color: #f8f9fa; font-size: 1.15em; text-align: right; color: #111; }
 
         .grand-total-container {
-            margin-top: 25px;
-            text-align: center;
-            font-size: 1.8em;
-            font-weight: bold;
-            background-color: #e3f2fd;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #b6d4fe;
-            color: #004085;
+            margin-top: 25px; text-align: center; font-size: 2em; font-weight: bold;
+            background-color: #eef6ff; padding: 25px; border-radius: 8px; border: 2px solid #b6d4fe; color: #004085;
         }
-        .multiplier-row { background-color: #fff9c4; }
-        .toggle-row { background-color: #f1f8ff; }
+        
+        .multiplier-row { background-color: #fffdf0; }
+        .toggle-row { background-color: #f8f9fa; }
+        .auto-row { background-color: #f8f9fa; }
+        .caulk-summary-row td { padding: 15px; font-size: 1em; border-top: 2px dashed #ccc; }
         
         .mobile-label { display: none; }
         
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
+        .action-buttons { display: flex; gap: 15px; margin-top: 25px; }
         .btn {
-            flex: 1;
-            padding: 15px;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-align: center;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            color: white;
+            flex: 1; padding: 16px; font-size: 1.2em; font-weight: bold; text-align: center;
+            border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; transition: transform 0.1s, box-shadow 0.1s;
         }
-        .btn-print { background-color: #28a745; }
-        .btn-print:active { background-color: #218838; }
+        .btn:active { transform: translateY(2px); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .btn-print { background-color: #198754; }
         .btn-reset { background-color: #dc3545; }
-        .btn-reset:active { background-color: #c82333; }
 
-        /* Print Styles - Triggers when saving to PDF */
+        /* --- ONE-PAGE PRINT PROPOSAL LAYOUT --- */
+        #printProposal { display: none; }
+        
         @media print {
-            body {
-                background-color: white;
-                padding: 0;
-            }
-            .container {
-                box-shadow: none;
-                max-width: 100%;
-                padding: 0;
-            }
-            .action-buttons { display: none; }
-            .qty-btn { display: none; }
-            input[type="number"] {
-                border: none;
-                background: transparent;
-                text-align: left;
-                width: auto;
-                height: auto;
-                font-size: 1.1em;
-            }
-            .qty-control { display: inline; }
-            .toggle-label {
-                border: none;
-                background: transparent;
-                padding: 0;
-            }
-            .toggle-label input[type="checkbox"] { display: none; }
-            /* Show a text status instead of a checkbox on print */
-            .toggle-label::before {
-                content: "Selected: Yes";
-                font-weight: bold;
-                color: #333;
-            }
-            .toggle-label:not(:has(input:checked))::before {
-                content: "Selected: No";
-                font-weight: normal;
-                color: #999;
-            }
-            .toggle-label strong { display: none; }
+            @page { margin: 0.35in; size: letter portrait; }
             
-            .customer-info input {
-                border: none;
-                border-bottom: 1px solid #000;
-                border-radius: 0;
-                background: transparent;
-                padding: 5px 0;
+            body { 
+                background-color: white; 
+                padding: 0; 
+                font-size: 11px; 
+                color: #000; 
+                line-height: 1.3; 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
             }
-            .readonly-qty { border: none; background: transparent; padding: 0; }
+            .container { box-shadow: none; max-width: 100%; padding: 0; margin: 0; }
+            
+            /* Hide the entire calculator UI */
+            .app-header, .customer-info, #estimatorTable, .grand-total-container, .action-buttons { display: none !important; }
+            
+            /* Show Proposal */
+            #printProposal { display: block; width: 100%; }
+            
+            .prop-header { border-bottom: 2px solid #0056b3; padding-bottom: 5px; margin-bottom: 15px; }
+            .prop-header h1 { color: #0056b3; margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+            .prop-header p { margin: 2px 0 0 0; color: #555; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+            
+            .prop-meta-grid { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 11px; }
+            .prop-meta-grid div { flex: 1; }
+            .prop-meta-label { font-weight: bold; color: #666; font-size: 9px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+            .prop-meta-value { font-size: 14px; font-weight: bold; color: #111; }
+            
+            .prop-summary-box { background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; }
+            .prop-summary-box h2 { margin: 0; font-size: 16px; color: #0056b3; }
+            
+            /* --- GUARANTEED 1-PAGE 2-COLUMN SCOPE --- */
+            .prop-scope-section { margin-bottom: 15px; }
+            .prop-scope-section h3 { border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 10px; color: #333; font-size: 14px; text-transform: uppercase; }
+            
+            #printScopeList { 
+                column-count: 2; 
+                column-gap: 25px; 
+                width: 100%;
+            }
+            
+            .print-scope-item { 
+                break-inside: avoid-column; 
+                page-break-inside: avoid; 
+                margin-bottom: 12px; 
+                padding-left: 10px; 
+                border-left: 3px solid #0056b3; 
+            }
+            .print-scope-item h4 { margin: 0 0 3px 0; font-size: 12px; color: #000; font-weight: bold; }
+            .print-scope-item p { margin: 0; font-size: 10.5px; color: #444; }
+            
+            .prop-total-section { text-align: right; margin-bottom: 30px; page-break-inside: avoid; border-top: 1px solid #eee; padding-top: 15px; }
+            .prop-total-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+            .prop-total-value { font-size: 28px; font-weight: bold; color: #000; display: inline-block; margin-top: 0px; min-width: 150px; }
+            
+            .prop-signature-box { border: 1px solid #ccc; padding: 15px; border-radius: 6px; page-break-inside: avoid; background-color: #f8f9fa; }
+            .prop-signature-box h4 { margin: 0 0 5px 0; font-size: 13px; text-transform: uppercase; }
+            .prop-signature-box p { font-size: 10px; color: #555; margin: 0 0 35px 0; }
+            .sig-lines { display: flex; justify-content: space-between; }
+            .sig-line { border-top: 1px solid #000; width: 45%; padding-top: 4px; font-size: 11px; color: #222; font-weight: bold; }
         }
 
-        /* Mobile Card Layout Transformation */
-        @media screen and (max-width: 950px) {
+        /* --- MOBILE SCREEN LAYOUT --- */
+        @media screen and (max-width: 850px) {
             table, thead, tbody, th, td, tr { display: block; }
             thead tr { position: absolute; top: -9999px; left: -9999px; }
-            tr { 
-                margin-bottom: 1.5rem;
-                border: 2px solid #ddd;
-                border-radius: 8px;
-                padding: 15px;
-                background-color: #fff;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            }
+            tr { margin-bottom: 1.5rem; border: 2px solid #ddd; border-radius: 8px; padding: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
             td { border: none; padding: 5px 0; position: relative; }
-            .category-cell {
-                font-weight: bold;
-                color: #0056b3;
-                font-size: 1em;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 8px;
-                margin-bottom: 8px;
-            }
-            td:nth-child(3), td:nth-child(4), td:nth-child(5) {
-                background: #f8f9fa;
-                margin-top: 10px;
-                padding: 15px;
-                border-radius: 8px;
-                border: 1px solid #eee;
-                text-align: center;
-            }
-            .mobile-label {
-                display: block;
-                font-size: 1.1em;
-                font-weight: bold;
-                color: #333;
-                margin-bottom: 10px;
-            }
-            .qty-control, .readonly-qty-container, .toggle-label {
-                width: 100%;
-                justify-content: center;
-                margin-bottom: 10px;
-                box-sizing: border-box;
-            }
+            td:nth-child(2), td:nth-child(3), td:nth-child(4) { background: #f8f9fa; margin-top: 10px; padding: 15px; border-radius: 8px; border: 1px solid #eee; text-align: center; }
+            .mobile-label { display: block; font-size: 1.1em; font-weight: bold; color: #333; margin-bottom: 10px; }
+            .qty-control, .toggle-label { width: 100%; justify-content: center; margin-bottom: 10px; box-sizing: border-box; }
             .qty-control input { flex-grow: 1; max-width: 100px; }
-            .price-calc {
-                display: block;
-                margin-left: 0;
-                font-size: 1.1em;
-                background: #fff;
-                padding: 8px;
-                border-radius: 6px;
-                border: 1px solid #e9ecef;
-            }
-            .row-total {
-                border-top: 1px solid #ddd;
-                margin-top: 15px;
-                padding-top: 15px;
-                font-size: 1.3em;
-                background-color: transparent;
-            }
+            .price-calc { display: block; margin-left: 0; font-size: 1.1em; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #e9ecef; }
+            .row-total { border-top: 1px solid #ddd; margin-top: 15px; padding-top: 15px; font-size: 1.3em; background-color: transparent; }
             .row-total::before { content: "Row Subtotal: "; font-weight: normal; font-size: 0.8em; color: #666; }
-            .multiplier-row td[colspan="3"], .toggle-row td[colspan="3"] {
-                display: block; width: 100%; margin-top: 10px; background-color: transparent;
-            }
+            .multiplier-row td[colspan="3"], .toggle-row td[colspan="3"], .caulk-summary-row td[colspan="2"] { display: block; width: 100%; margin-top: 10px; background-color: transparent; text-align: center !important; }
             .action-buttons { flex-direction: column; }
         }
     </style>
@@ -380,17 +203,17 @@
 <div class="container">
     <div class="app-header">
         <h1>SimplyDoors</h1>
-        <div class="header-subtext">Official Installation Estimate</div>
+        <div class="header-subtext">Internal Estimation Tool</div>
     </div>
 
     <div class="customer-info">
         <div class="info-group">
             <label>Customer Name</label>
-            <input type="text" placeholder="Enter name...">
+            <input type="text" id="custName" placeholder="Enter Client Name">
         </div>
         <div class="info-group">
             <label>Project Address</label>
-            <input type="text" placeholder="Enter address...">
+            <input type="text" id="custAddress" placeholder="Enter Jobsite Address">
         </div>
         <div class="info-group" style="flex: 0.5;">
             <label>Date</label>
@@ -401,7 +224,6 @@
     <table id="estimatorTable">
         <thead>
             <tr>
-                <th>Category</th>
                 <th>Item</th>
                 <th>Sm Qty</th>
                 <th>Med Qty</th>
@@ -418,29 +240,110 @@
     </div>
 
     <div class="action-buttons">
-        <button class="btn btn-print" onclick="window.print()">Save / Print Quote</button>
+        <button class="btn btn-print" onclick="preparePrint(); window.print()">Save / Print Proposal</button>
         <button class="btn btn-reset" onclick="resetCalculator()">Clear Calculator</button>
+    </div>
+
+    <div id="printProposal">
+        <div class="prop-header">
+            <h1>SimplyDoors</h1>
+            <p>Official Installation Proposal</p>
+        </div>
+
+        <div class="prop-meta-grid">
+            <div>
+                <span class="prop-meta-label">Prepared For</span>
+                <span class="prop-meta-value" id="printName">________________</span>
+            </div>
+            <div>
+                <span class="prop-meta-label">Property Address</span>
+                <span class="prop-meta-value" id="printAddress">________________</span>
+            </div>
+            <div>
+                <span class="prop-meta-label">Date</span>
+                <span class="prop-meta-value" id="printDate">________________</span>
+            </div>
+        </div>
+
+        <div class="prop-summary-box">
+            <h2 id="printSummaryText">Proposal for the installation of 0 window(s)</h2>
+        </div>
+
+        <div class="prop-scope-section">
+            <h3>Scope of Work Included</h3>
+            <div id="printScopeList">
+                </div>
+        </div>
+
+        <div class="prop-total-section">
+            <span class="prop-total-label">Total Investment</span><br>
+            <span class="prop-total-value" id="printGrandTotal">$0.00</span>
+        </div>
+
+        <div class="prop-signature-box">
+            <h4>Acceptance of Proposal</h4>
+            <p>The above prices, specifications, and conditions are satisfactory and are hereby accepted. SimplyDoors is authorized to do the work as specified.</p>
+            <div class="sig-lines">
+                <div class="sig-line">Customer Signature</div>
+                <div class="sig-line" style="width: 30%;">Date</div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // Set today's date automatically
+    // Initialize date to today
     document.getElementById('quoteDate').valueAsDate = new Date();
 
     const pricingData = [
-        { id: 1, category: "Existing Window Assessment", item: "Count units & sizes Based Removal Price", pS: 70, pM: 125, pL: 180, type: "standard" },
-        { id: 2, category: "New Window Verification", item: "Count units & sizes Based Install Price", pS: 90, pM: 150, pL: 200, type: "standard" },
-        { id: 3, category: "Installation Scope", item: "Stucco cutback", pS: 90, pM: 140, pL: 200, type: "standard" },
-        { id: 4, category: "Installation Scope", item: "Flashing requirements", pS: 0, pM: 0, pL: 0, type: "standard" },
-        { id: 5, category: "Installation Scope", item: "Interior Caulk", pS: 10, pM: 10, pL: 10, type: "standard", tubeCalc: true, tS: 1, tM: 1, tL: 2 },
-        { id: 6, category: "Installation Scope", item: "Exterior Caulk", pS: 10, pM: 10, pL: 10, type: "standard", tubeCalc: true, tS: 1, tM: 1, tL: 2 },
-        { id: 7, category: "Installation Scope", item: "Sheetrock/Wood Return Cutback", pS: 40, pM: 60, pL: 80, type: "standard" },
-        { id: 8, category: "Installation Scope", item: "Tile/Stone Return Cutback", pS: 80, pM: 120, pL: 160, type: "standard" },
-        { id: 9, category: "Installation Scope", item: "Exterior Trim", pS: 40, pM: 60, pL: 80, type: "standard" },
-        { id: 10, category: "Clean-Up & Protection", item: "Floor/furniture protection", multS: 0.15, type: "multiplier", range: [1,2,3,4,5,6,7,8,9] },
-        { id: 11, category: "Clean-Up & Protection", item: "Debris haul-off", pS: 10, pM: 15, pL: 20, type: "item_toggle", dependsOn: 2 },
-        { id: 12, category: "Safety & Equipment", item: "Scaffolding Required", pS: 30, pM: 30, pL: 50, type: "item_toggle", dependsOn: 2 },
-        { id: 13, category: "Labor Adders", item: "Limited site access", multS: 0.10, type: "multiplier", range: [1,2,3,4,5,6,7,8,9,10,11,12] }
+        { 
+            id: 2, item: "New Window Installation", pS: 90, pM: 150, pL: 200, type: "standard",
+            desc: "Placement, leveling, shimming, fastening, and securing the new window unit per manufacturer guidelines and local building standards. Includes proper insulation and water-seal preparation prior to interior/exterior finishing."
+        },
+        { 
+            id: 1, item: "Remove existing window", pS: 70, pM: 125, pL: 180, type: "standard",
+            desc: "Includes the careful removal of the existing window sash, frame, trim, and related components as needed for the approved installation method. Protects surrounding finishes where possible. Does not include repair of concealed damage unless noted elsewhere."
+        },
+        { 
+            id: 3, item: "Stucco cutback", pS: 90, pM: 140, pL: 200, type: "standard",
+            desc: "Cutting and removing stucco around the window perimeter to allow for full-frame replacement or access to structural components. Includes precise saw-cutting to minimize cracking and preparing edges for patching (patching itself is separate unless specified)."
+        },
+        { 
+            id: 5, item: "Interior Caulk", pS: 10, pM: 10, pL: 10, type: "auto_item", dependsOn: 1, hidden: true,
+            desc: "Application of interior-grade caulking or sealant around casing and trim to create a clean finish and reduce air leakage. Does not include painting unless specified." 
+        },
+        { 
+            id: 6, item: "Exterior Caulk", pS: 10, pM: 10, pL: 10, type: "auto_item", dependsOn: 1, hidden: true,
+            desc: "Weather-grade exterior caulking of perimeter joints to seal against water and air infiltration. Color matching provided where available. Does not include repainting of adjacent surfaces unless otherwise listed." 
+        },
+        { 
+            id: 7, item: "Sheetrock/Wood Return Cutback", pS: 40, pM: 60, pL: 80, type: "standard",
+            desc: "Removal or trimming of interior drywall or wood return extensions to allow the new window to fit properly within the opening. Prepares the area for reinstall or replacement of returns (return rebuild is separate unless listed)."
+        },
+        { 
+            id: 8, item: "Tile/Stone Return Cutback", pS: 80, pM: 120, pL: 160, type: "standard",
+            desc: "Precision cutting and removal of tile or stone at the window return area to allow installation access. This may involve specialty tools and dust management. Tile/stone repair or replacement is not included unless noted."
+        },
+        { 
+            id: 9, item: "Exterior Trim", pS: 40, pM: 60, pL: 80, type: "standard",
+            desc: "Installation of new exterior trim components such as brick mold, PVC trim, or wood trim depending on the scope. Includes cutting, fastening, and prepping joints for caulk. Painting or staining is excluded unless specified."
+        },
+        { 
+            id: 10, item: "Floor/furniture protection", multS: 0.15, type: "multiplier", range: [1,2,3,5,6,7,8,9],
+            desc: "Additional time and protective measures required when working in an occupied home. Includes floor protection, covering furniture, daily cleanup, noise and dust management, and accommodating homeowner schedule constraints."
+        },
+        { 
+            id: 11, item: "Debris haul-off", pS: 10, pM: 15, pL: 20, type: "item_toggle", dependsOn: 2,
+            desc: "Collection, loading, and disposal of construction debris generated by window removal and installation. Includes responsible disposal of glass, wood, and packaging materials. Does not include whole-house junk removal."
+        },
+        { 
+            id: 12, item: "Scaffolding Required", pS: 30, pM: 30, pL: 50, type: "item_toggle", dependsOn: 2,
+            desc: "Transporting, assembling, securing, and dismantling scaffolding required to access elevated window openings. Includes compliance with OSHA safety standards and jobsite-specific access requirements."
+        },
+        { 
+            id: 13, item: "Limited site access", multS: 0.10, type: "multiplier", range: [1,2,3,5,6,7,8,9,10,11,12],
+            desc: "Additional labor required due to restricted access such as long carries, tight stairways, limited parking, uneven terrain, locked or gated areas, or inability to stage materials near the work area. Adds time to both removal and installation activities."
+        }
     ];
 
     let quantities = {};
@@ -451,24 +354,20 @@
         
         pricingData.forEach(row => {
             quantities[row.id] = { s: 0, m: 0, l: 0, checked: false };
+            if (row.hidden) return; 
+
             const tr = document.createElement('tr');
             let inputHtml = '';
-            let itemHtml = `<strong>${row.item}</strong>`;
-            let rowTotalHtml = `<span id="total-${row.id}">$0.00</span>`;
-            
-            if (row.tubeCalc) {
-                rowTotalHtml += `<span class="row-total-tubes"><span id="tube-total-${row.id}">0</span> Tubes</span>`;
-            }
+            let itemHtml = `<strong style="font-size: 1.05em; color: #111;">${row.item}</strong>`;
 
             if (row.type === 'standard') {
                 const sizes = [
-                    {key: 's', label: 'Small', price: row.pS, tubes: row.tS}, 
-                    {key: 'm', label: 'Medium', price: row.pM, tubes: row.tM}, 
-                    {key: 'l', label: 'Large', price: row.pL, tubes: row.tL}
+                    {key: 's', label: 'Small', price: row.pS}, 
+                    {key: 'm', label: 'Medium', price: row.pM}, 
+                    {key: 'l', label: 'Large', price: row.pL}
                 ];
                 
                 sizes.forEach(sz => {
-                    let tubeString = row.tubeCalc ? `<span class="tube-text">(${sz.tubes} Tube${sz.tubes > 1 ? 's' : ''})</span>` : '';
                     inputHtml += `
                         <td>
                             <div class="mobile-label">${sz.label} Size</div>
@@ -477,35 +376,25 @@
                                 <input type="number" id="input-${row.id}-${sz.key}" min="0" value="0" inputmode="numeric" onfocus="this.select()" onchange="updateQty(${row.id}, '${sz.key}', this.value)">
                                 <button type="button" class="qty-btn qty-btn-plus" onclick="adjustQty(${row.id}, '${sz.key}', 1)">+</button>
                             </div>
-                            <span class="price-calc">@ $${sz.price} ${tubeString} = <b id="calc-${row.id}-${sz.key}">$0.00</b></span>
+                            <span class="price-calc">@ $${sz.price} = <b id="calc-${row.id}-${sz.key}">$0.00</b></span>
                         </td>
                     `;
                 });
             } else if (row.type === 'item_toggle') {
                 tr.classList.add('toggle-row');
-                itemHtml += `
-                    <br>
-                    <label class="toggle-label">
-                        <input type="checkbox" onchange="updateToggle(${row.id}, this.checked)"> 
-                        <strong>Include Service? (Yes)</strong>
-                    </label>
+                itemHtml += `<br><small style="color: #666; font-weight: bold;">($${row.pS} / $${row.pM} / $${row.pL} per window)</small>`;
+                inputHtml = `
+                    <td colspan="3" style="text-align: center;">
+                        <label class="toggle-label">
+                            <input type="checkbox" onchange="updateToggle(${row.id}, this.checked)"> 
+                            <strong>Include Service?</strong>
+                        </label>
+                    </td>
                 `;
-                const sizes = [{key: 's', label: 'Small', price: row.pS}, {key: 'm', label: 'Medium', price: row.pM}, {key: 'l', label: 'Large', price: row.pL}];
-                sizes.forEach(sz => {
-                    inputHtml += `
-                        <td>
-                            <div class="mobile-label">${sz.label} Size</div>
-                            <div class="readonly-qty-container">
-                                Qty: <span class="readonly-qty" id="qty-disp-${row.id}-${sz.key}">0</span>
-                            </div>
-                            <span class="price-calc">@ $${sz.price} = <b id="calc-${row.id}-${sz.key}">$0.00</b></span>
-                        </td>
-                    `;
-                });
             } else if (row.type === 'multiplier') {
                 tr.classList.add('multiplier-row');
                 inputHtml = `
-                    <td colspan="3">
+                    <td colspan="3" style="text-align: center;">
                         <label class="toggle-label">
                             <input type="checkbox" onchange="updateToggle(${row.id}, this.checked)">
                             <strong>Apply ${Math.round(row.multS * 100)}% Surcharge</strong> 
@@ -515,19 +404,87 @@
             }
 
             tr.innerHTML = `
-                <td class="category-cell">${row.category}</td>
                 <td>${itemHtml}</td>
                 ${inputHtml}
                 <td class="row-total" id="total-cell-${row.id}">
-                    ${rowTotalHtml}
+                    <span id="total-${row.id}">$0.00</span>
                 </td>
             `;
             tbody.appendChild(tr);
         });
+
+        const caulkTr = document.createElement('tr');
+        caulkTr.classList.add('auto-row', 'caulk-summary-row');
+        caulkTr.innerHTML = `
+            <td colspan="4" style="text-align: left; color: #333;">
+                <strong style="font-size: 1.05em; color: #111;">Interior & Exterior Caulk</strong> <small style="color: #666;">(Auto-calculated from Removal count)</small>
+            </td>
+            <td class="row-total" id="caulkTotalSummary">$0.00</td>
+        `;
+        tbody.appendChild(caulkTr);
         
         calculateTotals();
     }
 
+    // Ensures the Print Layout is generated even if the user hits Ctrl+P natively
+    window.addEventListener('beforeprint', preparePrint);
+
+    function preparePrint() {
+        // Sync Data
+        document.getElementById('printName').innerText = document.getElementById('custName').value || '_______________________';
+        document.getElementById('printAddress').innerText = document.getElementById('custAddress').value || '_______________________';
+        
+        const dateObj = new Date(document.getElementById('quoteDate').value);
+        if(!isNaN(dateObj)) {
+            dateObj.setMinutes(dateObj.getMinutes() + dateObj.getTimezoneOffset());
+            document.getElementById('printDate').innerText = dateObj.toLocaleDateString();
+        }
+
+        // Count Windows
+        const newWinQ = quantities[2];
+        const totalWindows = newWinQ.s + newWinQ.m + newWinQ.l;
+        document.getElementById('printSummaryText').innerText = `Proposal for the installation of ${totalWindows} window(s)`;
+
+        // Sync Total
+        document.getElementById('printGrandTotal').innerText = '$' + document.getElementById('grandTotal').innerText;
+
+        // Build Multi-Column Scope List
+        const printScopeList = document.getElementById('printScopeList');
+        printScopeList.innerHTML = ''; 
+        
+        let hasItems = false;
+
+        pricingData.forEach(row => {
+            let isSelected = false;
+            
+            if (row.type === 'standard' || row.type === 'auto_item') {
+                const targetQ = row.type === 'auto_item' ? quantities[row.dependsOn] : quantities[row.id];
+                if (targetQ && (targetQ.s > 0 || targetQ.m > 0 || targetQ.l > 0)) {
+                    isSelected = true;
+                }
+            } else if (row.type === 'item_toggle' || row.type === 'multiplier') {
+                if (quantities[row.id].checked) {
+                    isSelected = true;
+                }
+            }
+
+            if (isSelected && row.desc) {
+                hasItems = true;
+                printScopeList.innerHTML += `
+                    <div class="print-scope-item">
+                        <h4>• ${row.item}</h4>
+                        <p>${row.desc}</p>
+                    </div>
+                `;
+            }
+        });
+
+        if (!hasItems) {
+            printScopeList.innerHTML = `<p style="color: #666; font-style: italic; column-span: all;">No specific installation services selected.</p>`;
+        }
+    }
+
+    // Math & Interactions
     window.adjustQty = function(id, size, delta) {
         let currentVal = parseInt(quantities[id][size]) || 0;
         let newVal = Math.max(0, currentVal + delta); 
@@ -551,7 +508,8 @@
     window.resetCalculator = function() {
         if(confirm("Are you sure you want to clear all fields and start a new quote?")) {
             init(); 
-            document.querySelectorAll('.customer-info input[type="text"]').forEach(input => input.value = '');
+            document.getElementById('custName').value = '';
+            document.getElementById('custAddress').value = '';
             document.getElementById('quoteDate').valueAsDate = new Date();
             window.scrollTo(0, 0); 
         }
@@ -567,43 +525,25 @@
                 const totalS = q.s * row.pS;
                 const totalM = q.m * row.pM;
                 const totalL = q.l * row.pL;
-                
                 rowTotals[row.id] = totalS + totalM + totalL;
 
                 document.getElementById(`calc-${row.id}-s`).innerText = '$' + totalS.toFixed(2);
                 document.getElementById(`calc-${row.id}-m`).innerText = '$' + totalM.toFixed(2);
                 document.getElementById(`calc-${row.id}-l`).innerText = '$' + totalL.toFixed(2);
-
-                if (row.tubeCalc) {
-                    const totalTubes = (q.s * row.tS) + (q.m * row.tM) + (q.l * row.tL);
-                    document.getElementById(`tube-total-${row.id}`).innerText = totalTubes;
-                }
             }
         });
 
         pricingData.forEach(row => {
             if (row.type === 'item_toggle') {
-                const targetQ = quantities[row.dependsOn];
-                
-                document.getElementById(`qty-disp-${row.id}-s`).innerText = targetQ.s;
-                document.getElementById(`qty-disp-${row.id}-m`).innerText = targetQ.m;
-                document.getElementById(`qty-disp-${row.id}-l`).innerText = targetQ.l;
-
                 if (quantities[row.id].checked) {
-                    const totalS = targetQ.s * row.pS;
-                    const totalM = targetQ.m * row.pM;
-                    const totalL = targetQ.l * row.pL;
-                    rowTotals[row.id] = totalS + totalM + totalL;
-                    
-                    document.getElementById(`calc-${row.id}-s`).innerText = '$' + totalS.toFixed(2);
-                    document.getElementById(`calc-${row.id}-m`).innerText = '$' + totalM.toFixed(2);
-                    document.getElementById(`calc-${row.id}-l`).innerText = '$' + totalL.toFixed(2);
+                    const targetQ = quantities[row.dependsOn];
+                    rowTotals[row.id] = (targetQ.s * row.pS) + (targetQ.m * row.pM) + (targetQ.l * row.pL);
                 } else {
                     rowTotals[row.id] = 0;
-                    document.getElementById(`calc-${row.id}-s`).innerText = '$0.00';
-                    document.getElementById(`calc-${row.id}-m`).innerText = '$0.00';
-                    document.getElementById(`calc-${row.id}-l`).innerText = '$0.00';
                 }
+            } else if (row.type === 'auto_item') {
+                const targetQ = quantities[row.dependsOn];
+                rowTotals[row.id] = (targetQ.s * row.pS) + (targetQ.m * row.pM) + (targetQ.l * row.pL);
             }
         });
 
@@ -623,9 +563,14 @@
 
         pricingData.forEach(row => {
             const finalValue = rowTotals[row.id] || 0;
-            document.getElementById(`total-${row.id}`).innerText = '$' + finalValue.toFixed(2);
+            if (!row.hidden) {
+                document.getElementById(`total-${row.id}`).innerText = '$' + finalValue.toFixed(2);
+            }
             grandTotal += finalValue;
         });
+
+        let combinedCaulkTotal = (rowTotals[5] || 0) + (rowTotals[6] || 0);
+        document.getElementById('caulkTotalSummary').innerText = '$' + combinedCaulkTotal.toFixed(2);
 
         document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
     }
