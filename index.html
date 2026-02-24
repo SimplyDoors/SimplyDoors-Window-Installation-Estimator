@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimplyDoors - Installation Estimator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 10px;
+            margin: 0;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        /* Header & Customer Info */
+        .app-header {
+            text-align: center;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #0056b3;
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
+        }
+        .header-subtext {
+            color: #666;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .customer-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .info-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        .info-group label {
+            display: block;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .info-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 15px 10px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #e9ecef;
+            font-weight: 600;
+        }
+        .category-cell {
+            font-size: 0.85em;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* Inputs and Buttons */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            width: 50px;
+            height: 44px;
+            border: 2px solid #ccc;
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 0;
+            margin: 0;
+            background: #fff;
+            color: #333;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            background: #f8f9fa;
+        }
+
+        .qty-control {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+        }
+        .qty-btn {
+            width: 44px;
+            height: 48px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+        .qty-btn:active { background-color: #004085; }
+        .qty-btn-minus { border-radius: 6px 0 0 6px; }
+        .qty-btn-plus { border-radius: 0 6px 6px 0; }
+
+        .readonly-qty-container {
+            display: inline-flex;
+            align-items: center;
+            height: 48px;
+            font-size: 1.1em;
+            color: #555;
+            vertical-align: middle;
+        }
+        .readonly-qty {
+            font-weight: bold;
+            color: #0056b3;
+            margin-left: 8px;
+            font-size: 1.2em;
+            background: #e9ecef;
+            padding: 6px 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        
+        .price-calc {
+            display: inline-block;
+            color: #555;
+            white-space: nowrap;
+            vertical-align: middle;
+            margin-left: 12px;
+            font-size: 0.95em;
+        }
+        .price-calc b {
+            color: #0056b3;
+            display: inline-block;
+            min-width: 50px;
+            font-size: 1.1em;
+        }
+        .tube-text {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .toggle-label {
+            display: inline-flex;
+            align-items: center;
+            background: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            border: 2px solid #ccc;
+            user-select: none;
+        }
+        .toggle-label input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .toggle-label:has(input:checked) {
+            background: #e3f2fd;
+            border-color: #0056b3;
+        }
+
+        .row-total {
+            font-weight: bold;
+            background-color: #f8f9fa;
+            font-size: 1.1em;
+            text-align: right;
+        }
+        .row-total-tubes {
+            font-size: 0.8em;
+            color: #666;
+            font-weight: normal;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .grand-total-container {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #b6d4fe;
+            color: #004085;
+        }
+        .multiplier-row { background-color: #fff9c4; }
+        .toggle-row { background-color: #f1f8ff; }
+        
+        .mobile-label { display: none; }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            color: white;
+        }
+        .btn-print { background-color: #28a745; }
+        .btn-print:active { background-color: #218838; }
+        .btn-reset { background-color: #dc3545; }
+        .btn-reset:active { background-color: #c82333; }
+
+        /* Print Styles - Triggers when saving to PDF */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 0;
+            }
+            .action-buttons { display: none; }
+            .qty-btn { display: none; }
+            input[type="number"] {
+                border: none;
+                background: transparent;
+                text-align: left;
+                width: auto;
+                height: auto;
+                font-size: 1.1em;
+            }
+            .qty-control { display: inline; }
+            .toggle-label {
+                border: none;
+                background: transparent;
+                padding: 0;
+            }
+            .toggle-label input[type="checkbox"] { display: none; }
+            /* Show a text status instead of a checkbox on print */
+            .toggle-label::before {
+                content: "Selected: Yes";
+                font-weight: bold;
+                color: #333;
+            }
+            .toggle-label:not(:has(input:checked))::before {
+                content: "Selected: No";
+                font-weight: normal;
+                color: #999;
+            }
+            .toggle-label strong { display: none; }
+            
+            .customer-info input {
+                border: none;
+                border-bottom: 1px solid #000;
+                border-radius: 0;
+                background: transparent;
+                padding: 5px 0;
+            }
+            .readonly-qty { border: none; background: transparent; padding: 0; }
+        }
+
+        /* Mobile Card Layout Transformation */
+        @media screen and (max-width: 950px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { 
+                margin-bottom: 1.5rem;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+                padding: 15px;
+                background-color: #fff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+            td { border: none; padding: 5px 0; position: relative; }
+            .category-cell {
+                font-weight: bold;
+                color: #0056b3;
+                font-size: 1em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 8px;
+                margin-bottom: 8px;
+            }
+            td:nth-child(3), td:nth-child(4), td:nth-child(5) {
+                background: #f8f9fa;
+                margin-top: 10px;
+                padding: 15px;
+                border-radius: 8px;
+                border: 1px solid #eee;
+                text-align: center;
+            }
+            .mobile-label {
+                display: block;
+                font-size: 1.1em;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 10px;
+            }
+            .qty-control, .readonly-qty-container, .toggle-label {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 10px;
+                box-sizing: border-box;
+            }
+            .qty-control input { flex-grow: 1; max-width: 100px; }
+            .price-calc {
+                display: block;
+                margin-left: 0;
+                font-size: 1.1em;
+                background: #fff;
+                padding: 8px;
+                border-radius: 6px;
+                border: 1px solid #e9ecef;
+            }
+            .row-total {
+                border-top: 1px solid #ddd;
+                margin-top: 15px;
+                padding-top: 15px;
+                font-size: 1.3em;
+                background-color: transparent;
+            }
+            .row-total::before { content: "Row Subtotal: "; font-weight: normal; font-size: 0.8em; color: #666; }
+            .multiplier-row td[colspan="3"], .toggle-row td[colspan="3"] {
+                display: block; width: 100%; margin-top: 10px; background-color: transparent;
+            }
+            .action-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="app-header">
+        <h1>SimplyDoors</h1>
+        <div class="header-subtext">Official Installation Estimate</div>
+    </div>
+
+    <div class="customer-info">
+        <div class="info-group">
+            <label>Customer Name</label>
+            <input type="text" placeholder="Enter name...">
+        </div>
+        <div class="info-group">
+            <label>Project Address</label>
+            <input type="text" placeholder="Enter address...">
+        </div>
+        <div class="info-group" style="flex: 0.5;">
+            <label>Date</label>
+            <input type="date" id="quoteDate">
+        </div>
+    </div>
+    
+    <table id="estimatorTable">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Item</th>
+                <th>Sm Qty</th>
+                <th>Med Qty</th>
+                <th>Lrg Qty</th>
+                <th>Row Total</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            </tbody>
+    </table>
+
+    <div class="grand-total-container">
+        Grand Total: <br>$<span id="grandTotal">0.00</span>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-print" onclick="window.print()">Save / Print Quote</button>
+        <button class="btn btn-reset" onclick="resetCalculator()">Clear Calculator</button>
+    </div>
+</div>
+
+<script>
+    // Set today's date automatically
+    document.getElementById('quoteDate').valueAsDate = new Date();
+
+    const pricingData = [
+        { id: 1, category: "Existing Window Assessment", item: "Count units & sizes Based Removal Price", pS: 70, pM: 125, pL: 180, type: "standard" },
+        { id: 2, category: "New Window Verification", item: "Count units & sizes Based Install Price", pS: 90, pM: 150, pL: 200, type: "standard" },
+        { id: 3, category: "Installation Scope", item: "Stucco cutback", pS: 90, pM: 140, pL: 200, type: "standard" },
+        { id: 4, category: "Installation Scope", item: "Flashing requirements", pS: 0, pM: 0, pL: 0, type: "standard" },
+        { id: 5, category: "Installation Scope", item: "Interior Caulk", pS: 10, pM: 10, pL: 10, type: "standard", tubeCalc: true, tS: 1, tM: 1, tL: 2 },
+        { id: 6, category: "Installation Scope", item: "Exterior Caulk", pS: 10, pM: 10, pL: 10, type: "standard", tubeCalc: true, tS: 1, tM: 1, tL: 2 },
+        { id: 7, category: "Installation Scope", item: "Sheetrock/Wood Return Cutback", pS: 40, pM: 60, pL: 80, type: "standard" },
+        { id: 8, category: "Installation Scope", item: "Tile/Stone Return Cutback", pS: 80, pM: 120, pL: 160, type: "standard" },
+        { id: 9, category: "Installation Scope", item: "Exterior Trim", pS: 40, pM: 60, pL: 80, type: "standard" },
+        { id: 10, category: "Clean-Up & Protection", item: "Floor/furniture protection", multS: 0.15, type: "multiplier", range: [1,2,3,4,5,6,7,8,9] },
+        { id: 11, category: "Clean-Up & Protection", item: "Debris haul-off", pS: 10, pM: 15, pL: 20, type: "item_toggle", dependsOn: 2 },
+        { id: 12, category: "Safety & Equipment", item: "Scaffolding Required", pS: 30, pM: 30, pL: 50, type: "item_toggle", dependsOn: 2 },
+        { id: 13, category: "Labor Adders", item: "Limited site access", multS: 0.10, type: "multiplier", range: [1,2,3,4,5,6,7,8,9,10,11,12] }
+    ];
+
+    let quantities = {};
+
+    function init() {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = ''; 
+        
+        pricingData.forEach(row => {
+            quantities[row.id] = { s: 0, m: 0, l: 0, checked: false };
+            const tr = document.createElement('tr');
+            let inputHtml = '';
+            let itemHtml = `<strong>${row.item}</strong>`;
+            let rowTotalHtml = `<span id="total-${row.id}">$0.00</span>`;
+            
+            if (row.tubeCalc) {
+                rowTotalHtml += `<span class="row-total-tubes"><span id="tube-total-${row.id}">0</span> Tubes</span>`;
+            }
+
+            if (row.type === 'standard') {
+                const sizes = [
+                    {key: 's', label: 'Small', price: row.pS, tubes: row.tS}, 
+                    {key: 'm', label: 'Medium', price: row.pM, tubes: row.tM}, 
+                    {key: 'l', label: 'Large', price: row.pL, tubes: row.tL}
+                ];
+                
+                sizes.forEach(sz => {
+                    let tubeString = row.tubeCalc ? `<span class="tube-text">(${sz.tubes} Tube${sz.tubes > 1 ? 's' : ''})</span>` : '';
+                    inputHtml += `
+                        <td>
+                            <div class="mobile-label">${sz.label} Size</div>
+                            <div class="qty-control">
+                                <button type="button" class="qty-btn qty-btn-minus" onclick="adjustQty(${row.id}, '${sz.key}', -1)">−</button>
+                                <input type="number" id="input-${row.id}-${sz.key}" min="0" value="0" inputmode="numeric" onfocus="this.select()" onchange="updateQty(${row.id}, '${sz.key}', this.value)">
+                                <button type="button" class="qty-btn qty-btn-plus" onclick="adjustQty(${row.id}, '${sz.key}', 1)">+</button>
+                            </div>
+                            <span class="price-calc">@ $${sz.price} ${tubeString} = <b id="calc-${row.id}-${sz.key}">$0.00</b></span>
+                        </td>
+                    `;
+                });
+            } else if (row.type === 'item_toggle') {
+                tr.classList.add('toggle-row');
+                itemHtml += `
+                    <br>
+                    <label class="toggle-label">
+                        <input type="checkbox" onchange="updateToggle(${row.id}, this.checked)"> 
+                        <strong>Include Service? (Yes)</strong>
+                    </label>
+                `;
+                const sizes = [{key: 's', label: 'Small', price: row.pS}, {key: 'm', label: 'Medium', price: row.pM}, {key: 'l', label: 'Large', price: row.pL}];
+                sizes.forEach(sz => {
+                    inputHtml += `
+                        <td>
+                            <div class="mobile-label">${sz.label} Size</div>
+                            <div class="readonly-qty-container">
+                                Qty: <span class="readonly-qty" id="qty-disp-${row.id}-${sz.key}">0</span>
+                            </div>
+                            <span class="price-calc">@ $${sz.price} = <b id="calc-${row.id}-${sz.key}">$0.00</b></span>
+                        </td>
+                    `;
+                });
+            } else if (row.type === 'multiplier') {
+                tr.classList.add('multiplier-row');
+                inputHtml = `
+                    <td colspan="3">
+                        <label class="toggle-label">
+                            <input type="checkbox" onchange="updateToggle(${row.id}, this.checked)">
+                            <strong>Apply ${Math.round(row.multS * 100)}% Surcharge</strong> 
+                        </label>
+                    </td>
+                `;
+            }
+
+            tr.innerHTML = `
+                <td class="category-cell">${row.category}</td>
+                <td>${itemHtml}</td>
+                ${inputHtml}
+                <td class="row-total" id="total-cell-${row.id}">
+                    ${rowTotalHtml}
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+        
+        calculateTotals();
+    }
+
+    window.adjustQty = function(id, size, delta) {
+        let currentVal = parseInt(quantities[id][size]) || 0;
+        let newVal = Math.max(0, currentVal + delta); 
+        quantities[id][size] = newVal;
+        document.getElementById(`input-${id}-${size}`).value = newVal;
+        calculateTotals();
+    }
+
+    window.updateQty = function(id, size, val) {
+        let newVal = Math.max(0, parseInt(val) || 0);
+        quantities[id][size] = newVal;
+        document.getElementById(`input-${id}-${size}`).value = newVal;
+        calculateTotals();
+    }
+
+    window.updateToggle = function(id, isChecked) {
+        quantities[id].checked = isChecked;
+        calculateTotals();
+    }
+
+    window.resetCalculator = function() {
+        if(confirm("Are you sure you want to clear all fields and start a new quote?")) {
+            init(); 
+            document.querySelectorAll('.customer-info input[type="text"]').forEach(input => input.value = '');
+            document.getElementById('quoteDate').valueAsDate = new Date();
+            window.scrollTo(0, 0); 
+        }
+    }
+
+    function calculateTotals() {
+        let grandTotal = 0;
+        let rowTotals = {}; 
+
+        pricingData.forEach(row => {
+            if (row.type === 'standard') {
+                const q = quantities[row.id];
+                const totalS = q.s * row.pS;
+                const totalM = q.m * row.pM;
+                const totalL = q.l * row.pL;
+                
+                rowTotals[row.id] = totalS + totalM + totalL;
+
+                document.getElementById(`calc-${row.id}-s`).innerText = '$' + totalS.toFixed(2);
+                document.getElementById(`calc-${row.id}-m`).innerText = '$' + totalM.toFixed(2);
+                document.getElementById(`calc-${row.id}-l`).innerText = '$' + totalL.toFixed(2);
+
+                if (row.tubeCalc) {
+                    const totalTubes = (q.s * row.tS) + (q.m * row.tM) + (q.l * row.tL);
+                    document.getElementById(`tube-total-${row.id}`).innerText = totalTubes;
+                }
+            }
+        });
+
+        pricingData.forEach(row => {
+            if (row.type === 'item_toggle') {
+                const targetQ = quantities[row.dependsOn];
+                
+                document.getElementById(`qty-disp-${row.id}-s`).innerText = targetQ.s;
+                document.getElementById(`qty-disp-${row.id}-m`).innerText = targetQ.m;
+                document.getElementById(`qty-disp-${row.id}-l`).innerText = targetQ.l;
+
+                if (quantities[row.id].checked) {
+                    const totalS = targetQ.s * row.pS;
+                    const totalM = targetQ.m * row.pM;
+                    const totalL = targetQ.l * row.pL;
+                    rowTotals[row.id] = totalS + totalM + totalL;
+                    
+                    document.getElementById(`calc-${row.id}-s`).innerText = '$' + totalS.toFixed(2);
+                    document.getElementById(`calc-${row.id}-m`).innerText = '$' + totalM.toFixed(2);
+                    document.getElementById(`calc-${row.id}-l`).innerText = '$' + totalL.toFixed(2);
+                } else {
+                    rowTotals[row.id] = 0;
+                    document.getElementById(`calc-${row.id}-s`).innerText = '$0.00';
+                    document.getElementById(`calc-${row.id}-m`).innerText = '$0.00';
+                    document.getElementById(`calc-${row.id}-l`).innerText = '$0.00';
+                }
+            }
+        });
+
+        pricingData.forEach(row => {
+            if (row.type === 'multiplier') {
+                if (quantities[row.id].checked) {
+                    let rangeSum = 0;
+                    row.range.forEach(rangeId => {
+                        rangeSum += (rowTotals[rangeId] || 0);
+                    });
+                    rowTotals[row.id] = rangeSum * row.multS;
+                } else {
+                    rowTotals[row.id] = 0;
+                }
+            }
+        });
+
+        pricingData.forEach(row => {
+            const finalValue = rowTotals[row.id] || 0;
+            document.getElementById(`total-${row.id}`).innerText = '$' + finalValue.toFixed(2);
+            grandTotal += finalValue;
+        });
+
+        document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>
