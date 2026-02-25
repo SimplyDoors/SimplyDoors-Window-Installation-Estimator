@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SimplyDoors - Installation Estimator</title>
     <style>
-        /* --- BRAND COLORS & BASE STYLES --- */
+        /* ==========================================================
+           1. BRAND COLORS & BASE STYLES
+           ========================================================== */
         :root {
             --brand-green: #7cc243;
             --brand-green-hover: #68a536;
@@ -20,6 +22,7 @@
             padding: 10px;
             margin: 0;
             font-size: 16px;
+            -webkit-font-smoothing: antialiased;
         }
         .container {
             max-width: 1000px;
@@ -30,7 +33,9 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         
-        /* --- SCREEN CALCULATOR INTERFACE --- */
+        /* ==========================================================
+           2. SCREEN UI: HEADER & CUSTOMER INFO
+           ========================================================== */
         .app-header {
             text-align: center;
             border-bottom: 2px solid var(--brand-green);
@@ -74,6 +79,9 @@
         .info-group input { width: 100%; padding: 12px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; transition: border-color 0.2s; }
         .info-group input:focus { border-color: var(--brand-green); outline: none; }
         
+        /* ==========================================================
+           3. SCREEN UI: CALCULATOR TABLE & INPUTS
+           ========================================================== */
         table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 10px; }
         th, td { border: 1px solid #dee2e6; padding: 15px 10px; text-align: left; vertical-align: middle; }
         th { background-color: #e9ecef; font-weight: 600; color: #333; }
@@ -109,11 +117,6 @@
 
         .row-total { font-weight: bold; background-color: #f8f9fa; font-size: 1.15em; text-align: right; color: var(--brand-dark); }
 
-        .grand-total-container {
-            margin-top: 25px; text-align: center; font-size: 2em; font-weight: bold;
-            background-color: var(--brand-light); padding: 25px; border-radius: 8px; border: 2px solid var(--brand-green); color: var(--brand-dark);
-        }
-        
         .multiplier-row { background-color: #fffdf0; }
         .toggle-row { background-color: #f8f9fa; }
         .auto-row { background-color: #f8f9fa; }
@@ -126,6 +129,14 @@
         .percent-input-wrapper input { width: 55px; height: 34px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 18px; margin-right: 5px; font-weight: bold;}
         .percent-input-wrapper input:focus { border-color: var(--brand-green); outline: none; background: var(--brand-light); }
 
+        /* ==========================================================
+           4. SCREEN UI: GRAND TOTAL & BUTTONS
+           ========================================================== */
+        .grand-total-container {
+            margin-top: 25px; text-align: center; font-size: 2em; font-weight: bold;
+            background-color: var(--brand-light); padding: 25px; border-radius: 8px; border: 2px solid var(--brand-green); color: var(--brand-dark);
+        }
+
         .action-buttons { display: flex; gap: 15px; margin-top: 25px; }
         .btn {
             flex: 1; padding: 16px; font-size: 1.2em; font-weight: bold; text-align: center;
@@ -135,10 +146,13 @@
         .btn-print { background-color: var(--brand-green); color: var(--brand-dark); font-weight: 800; }
         .btn-reset { background-color: #dc3545; }
 
-        /* --- STRICT 2-PAGE BRANDED PRINT PROPOSAL LAYOUT --- */
+        /* ==========================================================
+           5. STRICT 2-PAGE BRANDED PRINT PROPOSAL LAYOUT
+           ========================================================== */
         #printProposal { display: none; }
         
         @media print {
+            /* Tighter margins guarantee everything stays within boundaries */
             @page { margin: 0.35in; size: letter portrait; }
             
             body { 
@@ -150,14 +164,12 @@
             }
             .container { box-shadow: none; max-width: 100%; padding: 0; margin: 0; }
             
-            /* Hide UI */
+            /* Hide the calculator UI completely during print */
             .app-header, .customer-info, #estimatorTable, .grand-total-container, .action-buttons { display: none !important; }
             
             #printProposal { display: block; width: 100%; }
             
-            /* ======================================= */
             /* PAGE 1: HEADER, CUSTOMER, SCOPE, TOTAL  */
-            /* ======================================= */
             .prop-header { margin-bottom: 12px; border-bottom: 2px solid #7cc243; padding-bottom: 8px; }
             .prop-header-content { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
             .brand-logo-container { display: flex; align-items: center; gap: 12px; }
@@ -175,11 +187,10 @@
             .prop-summary-box { background-color: #f8f9fa; border: 1px solid #7cc243; padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; }
             .prop-summary-box h2 { margin: 0; font-size: 16px; color: #1d2b1d; }
             
-            /* Tightly Packed Scope Section to guarantee fitting on Page 1 */
+            /* Scope Grid: Bulletproof Inline-Block 2-Column format */
             .prop-scope-section { margin-bottom: 10px; }
             .prop-scope-section h3 { border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 8px; color: #333; font-size: 13px; text-transform: uppercase; }
             
-            /* Bulletproof Inline-Block 2-Column Grid */
             #printScopeList { display: block; width: 100%; font-size: 0; }
             .print-scope-item { 
                 display: inline-block; vertical-align: top; width: 48%; margin-right: 4%; 
@@ -191,16 +202,14 @@
             .print-scope-item h4 { margin: 0 0 2px 0; font-size: 11.5px; color: #000; font-weight: bold; }
             .print-scope-item p { margin: 0; font-size: 10px; color: #444; line-height: 1.25; }
             
-            /* Total Section pinned to bottom of Page 1 */
+            /* Total Section: Pinned to bottom of Page 1 */
             .prop-total-section { text-align: right; margin-bottom: 0; border-top: 1px solid #eee; padding-top: 10px; page-break-inside: avoid; }
             .prop-total-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
             .prop-total-value { font-size: 28px; font-weight: bold; color: #1d2b1d; display: inline-block; margin-top: 0px; min-width: 150px; }
             
-            /* ======================================= */
-            /* PAGE 2: LEGAL TERMS & SIGNATURE         */
-            /* ======================================= */
+            /* PAGE 2: LEGAL TERMS & SIGNATURE */
             .prop-terms-section { 
-                page-break-before: always; /* FORCES PAGE 2 */
+                page-break-before: always; /* GUARANTEES THIS STARTS ON PAGE 2 */
                 break-before: page;
                 margin-top: 0; 
                 padding-top: 0; 
@@ -209,7 +218,7 @@
             .prop-terms-section h3 { margin: 0 0 5px 0; font-size: 16px; color: #1d2b1d; text-transform: uppercase; border-bottom: 2px solid #1d2b1d; padding-bottom: 6px; }
             .terms-intro { font-size: 11px; color: #555; margin: 0 0 15px 0; font-style: italic; }
             
-            /* Bulletproof Inline-Block 2-Column Grid for Terms */
+            /* Single column legal layout for easy reading */
             .terms-grid { display: block; width: 100%; font-size: 0; }
             .terms-col { 
                 display: inline-block; vertical-align: top; width: 48%; margin-right: 4%; 
@@ -223,7 +232,7 @@
             .terms-col li { margin-bottom: 4px; }
             .terms-col em { font-size: 10px; color: #666; display: block; margin-bottom: 20px; font-style: italic; }
 
-            /* Signature Box fits nicely at bottom of Page 2 */
+            /* Signature Box: Fits nicely at bottom of Page 2 */
             .prop-signature-box { border: 1px solid #ccc; padding: 20px; border-radius: 6px; margin-top: 30px; page-break-inside: avoid; background-color: #f8f9fa; }
             .prop-signature-box h4 { margin: 0 0 6px 0; font-size: 14px; text-transform: uppercase; color: #1d2b1d; }
             .prop-signature-box p { font-size: 11px; color: #555; margin: 0 0 35px 0; line-height: 1.4; }
@@ -231,7 +240,9 @@
             .sig-line { border-top: 1px solid #000; width: 45%; padding-top: 6px; font-size: 12px; color: #222; font-weight: bold; }
         }
 
-        /* --- MOBILE SCREEN LAYOUT --- */
+        /* ==========================================================
+           6. MOBILE SCREEN LAYOUT (Table becomes stacked cards)
+           ========================================================== */
         @media screen and (max-width: 850px) {
             table, thead, tbody, th, td, tr { display: block; }
             thead tr { position: absolute; top: -9999px; left: -9999px; }
@@ -267,15 +278,15 @@
     <div class="customer-info">
         <div class="info-group">
             <label>Customer Name</label>
-            <input type="text" id="custName" placeholder="Enter Client Name">
+            <input type="text" id="custName" placeholder="Enter Client Name" tabindex="1">
         </div>
         <div class="info-group">
             <label>Project Address</label>
-            <input type="text" id="custAddress" placeholder="Enter Jobsite Address">
+            <input type="text" id="custAddress" placeholder="Enter Jobsite Address" tabindex="2">
         </div>
         <div class="info-group" style="flex: 0.5;">
             <label>Date</label>
-            <input type="date" id="quoteDate">
+            <input type="date" id="quoteDate" tabindex="3">
         </div>
     </div>
     
@@ -307,7 +318,7 @@
         <div class="prop-header">
             <div class="prop-header-content">
                 <div class="brand-logo-container">
-                    <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <path d="M 45 20 L 85 20 L 85 80 L 45 80" fill="none" stroke="#7cc243" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
                         <polygon points="15,5 45,20 45,80 15,95" fill="#7cc243" />
                         <circle cx="36" cy="50" r="3" fill="#ffffff" />
@@ -431,15 +442,21 @@
 </div>
 
 <script>
-    // Format local date string explicitly
+    /* ==========================================================
+       JAVASCRIPT APP LOGIC & MATH ENGINE
+       ========================================================== */
+
+    // 1. Initialize Date safely to local timezone
     const today = new Date();
     const localDateStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('quoteDate').value = localDateStr;
 
+    // Helper function for professional money formatting (adds commas and decimals)
     function formatMoney(amount) {
         return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    // 2. Core Data Array: Contains pricing, descriptions, and dependency logic
     const pricingData = [
         { 
             id: 5, item: "Install New Windows", pS: 90, pM: 150, pL: 200, type: "standard",
@@ -493,18 +510,24 @@
 
     let quantities = {};
 
+    // 3. UI Generator: Builds the table dynamically on page load
     function init() {
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = ''; 
+        let tabIndexCounter = 4; // Start tabbing after the date field
         
         pricingData.forEach(row => {
+            // Setup internal state
             quantities[row.id] = { s: 0, m: 0, l: 0, checked: false, percent: row.defaultPercent || 0 };
+            
+            // Skip hidden rows (Caulk is calculated but not drawn individually)
             if (row.hidden) return; 
 
             const tr = document.createElement('tr');
             let inputHtml = '';
             let itemHtml = `<strong style="font-size: 1.05em; color: var(--brand-dark);">${row.item}</strong>`;
 
+            // Renders standard +/- quantity boxes
             if (row.type === 'standard') {
                 const sizes = [
                     {key: 's', label: 'Small', price: row.pS}, 
@@ -517,15 +540,17 @@
                         <td>
                             <div class="mobile-label">${sz.label} Size</div>
                             <div class="qty-control">
-                                <button type="button" class="qty-btn qty-btn-minus" onclick="adjustQty(${row.id}, '${sz.key}', -1)">−</button>
-                                <input type="number" id="input-${row.id}-${sz.key}" min="0" value="0" inputmode="numeric" onfocus="this.select()" onchange="updateQty(${row.id}, '${sz.key}', this.value)">
-                                <button type="button" class="qty-btn qty-btn-plus" onclick="adjustQty(${row.id}, '${sz.key}', 1)">+</button>
+                                <button type="button" class="qty-btn qty-btn-minus" tabindex="-1" onclick="adjustQty(${row.id}, '${sz.key}', -1)">−</button>
+                                <input type="number" id="input-${row.id}-${sz.key}" min="0" value="0" inputmode="numeric" tabindex="${tabIndexCounter++}" onfocus="this.select()" onchange="updateQty(${row.id}, '${sz.key}', this.value)">
+                                <button type="button" class="qty-btn qty-btn-plus" tabindex="-1" onclick="adjustQty(${row.id}, '${sz.key}', 1)">+</button>
                             </div>
                             <span class="price-calc">@ $${sz.price} = <b id="calc-${row.id}-${sz.key}">$0.00</b></span>
                         </td>
                     `;
                 });
-            } else if (row.type === 'item_toggle') {
+            } 
+            // Renders simple Yes/No toggle boxes
+            else if (row.type === 'item_toggle') {
                 tr.classList.add('toggle-row');
                 itemHtml += `<br><small style="color: #666; font-weight: bold;">($${row.pS} / $${row.pM} / $${row.pL} per window)</small>`;
                 inputHtml = `
@@ -536,7 +561,9 @@
                         </label>
                     </td>
                 `;
-            } else if (row.type === 'multiplier_input') {
+            } 
+            // Renders percentage inputs for the Lived In / Access fees
+            else if (row.type === 'multiplier_input') {
                 tr.classList.add('multiplier-row');
                 inputHtml = `
                     <td colspan="3" style="text-align: center;">
@@ -546,7 +573,7 @@
                                 <strong>Apply Surcharge</strong> 
                             </label>
                             <div class="percent-input-wrapper">
-                                <input type="number" id="input-${row.id}-percent" value="${row.defaultPercent}" min="0" onfocus="this.select()" onchange="updateMultiplier(${row.id}, this.value)">
+                                <input type="number" id="input-${row.id}-percent" value="${row.defaultPercent}" min="0" tabindex="${tabIndexCounter++}" onfocus="this.select()" onchange="updateMultiplier(${row.id}, this.value)">
                                 <span>%</span>
                             </div>
                         </div>
@@ -564,6 +591,7 @@
             tbody.appendChild(tr);
         });
 
+        // Appends the combined Caulk summary row right after the Stucco cutback
         const caulkTr = document.createElement('tr');
         caulkTr.classList.add('auto-row', 'caulk-summary-row');
         caulkTr.innerHTML = `
@@ -572,30 +600,31 @@
             </td>
             <td class="row-total" id="caulkTotalSummary">$0.00</td>
         `;
-        // Insert right after the Cutback Stucco
         tbody.insertBefore(caulkTr, tbody.children[3]);
         
         calculateTotals();
     }
 
-    // Prepare print data BEFORE launching dialog
-    window.addEventListener('beforeprint', preparePrint);
-
+    // 4. Data Transfer: Formats everything perfectly for the Print Layout
     function preparePrint() {
         document.getElementById('printName').innerText = document.getElementById('custName').value || '_______________________';
         document.getElementById('printAddress').innerText = document.getElementById('custAddress').value || '_______________________';
         
+        // Handles converting YYYY-MM-DD to standard MM/DD/YYYY for the printed page
         const dateParts = document.getElementById('quoteDate').value.split('-');
         if(dateParts.length === 3) {
             document.getElementById('printDate').innerText = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
         }
 
+        // Extracts the Install window count for the header summary
         const newWinQ = quantities[5];
         const totalWindows = newWinQ ? (newWinQ.s + newWinQ.m + newWinQ.l) : 0;
         document.getElementById('printSummaryText').innerText = `Proposal for the installation of ${totalWindows} window(s)`;
 
+        // Pulls the final calculated string
         document.getElementById('printGrandTotal').innerText = document.getElementById('grandTotal').innerText;
 
+        // Iterates through pricingData and dynamically builds the bulleted scope list based on selections
         const printScopeList = document.getElementById('printScopeList');
         printScopeList.innerHTML = ''; 
         
@@ -627,11 +656,14 @@
         });
 
         if (!hasItems) {
-            printScopeList.innerHTML = `<p style="color: #666; font-style: italic; width: 100%; font-size: 12px;">No specific installation services selected.</p>`;
+            printScopeList.innerHTML = `<p style="color: #666; font-style: italic; width: 100%; font-size: 13px;">No specific installation services selected.</p>`;
         }
     }
 
-    // Extended delay to guarantee iPad draws the DOM before printing
+    // Listens for Ctrl+P or Command+P to trigger layout formatting
+    window.addEventListener('beforeprint', preparePrint);
+
+    // Forces a small delay so Apple iPads have time to render the DOM changes before taking the PDF snapshot
     window.triggerPrint = function() {
         preparePrint();
         setTimeout(function() {
@@ -639,7 +671,7 @@
         }, 250); 
     }
     
-    // Math & Interactions
+    // 5. User Input Handlers
     window.adjustQty = function(id, size, delta) {
         let currentVal = parseInt(quantities[id][size]) || 0;
         let newVal = Math.max(0, currentVal + delta); 
@@ -649,7 +681,7 @@
     }
 
     window.updateQty = function(id, size, val) {
-        let newVal = Math.max(0, parseInt(val) || 0);
+        let newVal = Math.max(0, parseInt(val) || 0); // Sanitizes bad keyboard inputs to 0
         quantities[id][size] = newVal;
         document.getElementById(`input-${id}-${size}`).value = newVal;
         calculateTotals();
@@ -661,26 +693,28 @@
     }
 
     window.updateMultiplier = function(id, val) {
-        quantities[id].percent = parseFloat(val) || 0;
+        quantities[id].percent = parseFloat(val) || 0; // Sanitizes empty percent boxes
         calculateTotals();
     }
 
     window.resetCalculator = function() {
-        if(confirm("Are you sure you want to clear all fields and start a new quote?")) {
+        if(confirm("Are you sure you want to clear all fields and start a new quote? This cannot be undone.")) {
             init(); 
             document.getElementById('custName').value = '';
             document.getElementById('custAddress').value = '';
+            
             const todayReset = new Date();
             document.getElementById('quoteDate').value = todayReset.getFullYear() + '-' + String(todayReset.getMonth() + 1).padStart(2, '0') + '-' + String(todayReset.getDate()).padStart(2, '0');
             window.scrollTo(0, 0); 
         }
     }
 
+    // 6. Core Waterfall Math Engine
     function calculateTotals() {
         let grandTotal = 0;
         let rowTotals = {}; 
 
-        // Pass 1
+        // Pass 1: Standard Items (Window Install, Removals, Stucco, Returns, etc.)
         pricingData.forEach(row => {
             if (row.type === 'standard') {
                 const q = quantities[row.id];
@@ -695,7 +729,7 @@
             }
         });
 
-        // Pass 2
+        // Pass 2: Toggles and Dependent Auto Items (Debris, Scaffolding, Caulk)
         pricingData.forEach(row => {
             if (row.type === 'item_toggle') {
                 if (quantities[row.id].checked) {
@@ -710,7 +744,7 @@
             }
         });
 
-        // Pass 3: Multipliers with dynamic inputs
+        // Pass 3: Multipliers with dynamic inputs (Lived In, Site Access)
         pricingData.forEach(row => {
             if (row.type === 'multiplier_input') {
                 if (quantities[row.id].checked) {
@@ -725,7 +759,7 @@
             }
         });
 
-        // Final Pass
+        // Final Pass: Update UI Row Totals and construct the Grand Total
         pricingData.forEach(row => {
             const finalValue = rowTotals[row.id] || 0;
             if (!row.hidden) {
@@ -734,12 +768,15 @@
             grandTotal += finalValue;
         });
 
+        // Push combined Caulk math to the UI (Sum of Int and Ext Caulk)
         let combinedCaulkTotal = (rowTotals[6] || 0) + (rowTotals[7] || 0);
         document.getElementById('caulkTotalSummary').innerText = '$' + formatMoney(combinedCaulkTotal);
 
+        // Push Grand Total to the UI
         document.getElementById('grandTotal').innerText = '$' + formatMoney(grandTotal);
     }
 
+    // Trigger build on page load
     window.onload = init;
 </script>
 
