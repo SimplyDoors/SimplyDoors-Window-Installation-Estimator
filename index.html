@@ -109,7 +109,6 @@
 
         .row-total { font-weight: bold; background-color: #f8f9fa; font-size: 1.15em; text-align: right; color: var(--brand-dark); }
 
-        /* FIXED: Removed the extra $ sign from HTML to prevent $$ */
         .grand-total-container {
             margin-top: 25px; text-align: center; font-size: 2em; font-weight: bold;
             background-color: var(--brand-light); padding: 25px; border-radius: 8px; border: 2px solid var(--brand-green); color: var(--brand-dark);
@@ -136,79 +135,100 @@
         .btn-print { background-color: var(--brand-green); color: var(--brand-dark); font-weight: 800; }
         .btn-reset { background-color: #dc3545; }
 
-        /* --- ONE-PAGE BRANDED PRINT PROPOSAL LAYOUT --- */
+        /* --- STRICT 2-PAGE BRANDED PRINT PROPOSAL LAYOUT --- */
         #printProposal { display: none; }
         
         @media print {
-            /* Extremely tight margins to ensure everything stays on 1 page */
-            @page { margin: 0.25in; size: letter portrait; }
+            @page { margin: 0.35in; size: letter portrait; }
             
             body { 
                 background-color: white; 
                 padding: 0; 
-                font-size: 11px; 
                 color: #000; 
-                line-height: 1.2; 
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important; 
             }
             .container { box-shadow: none; max-width: 100%; padding: 0; margin: 0; }
             
-            /* Hide UI completely */
+            /* Hide UI */
             .app-header, .customer-info, #estimatorTable, .grand-total-container, .action-buttons { display: none !important; }
             
-            /* Show Formal Proposal */
             #printProposal { display: block; width: 100%; }
             
-            /* Tightly packed Header */
-            .prop-header { margin-bottom: 5px; border-bottom: 2px solid #7cc243; padding-bottom: 5px; }
-            .prop-header-content { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
-            .brand-logo-container { display: flex; align-items: center; gap: 8px; }
-            .brand-text h1 { color: #1d2b1d; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-            .brand-text p { color: #1d2b1d; margin: 0; font-size: 10px; letter-spacing: 0.5px; font-weight: 600; text-transform: uppercase; }
-            .company-contact { text-align: right; font-size: 9px; color: #444; line-height: 1.3; }
-            .proposal-title-bar { padding-top: 2px; }
-            .proposal-title-bar h2 { margin: 0; font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 2px; }
+            /* ======================================= */
+            /* PAGE 1: HEADER, CUSTOMER, SCOPE, TOTAL  */
+            /* ======================================= */
+            .prop-header { margin-bottom: 12px; border-bottom: 2px solid #7cc243; padding-bottom: 8px; }
+            .prop-header-content { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+            .brand-logo-container { display: flex; align-items: center; gap: 12px; }
+            .brand-text h1 { color: #1d2b1d; margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+            .brand-text p { color: #1d2b1d; margin: 0; font-size: 11px; letter-spacing: 0.5px; font-weight: 600; text-transform: uppercase; }
+            .company-contact { text-align: right; font-size: 10px; color: #444; line-height: 1.4; }
+            .proposal-title-bar { padding-top: 4px; }
+            .proposal-title-bar h2 { margin: 0; font-size: 12px; color: #555; text-transform: uppercase; letter-spacing: 2px; }
             
-            /* Tightly packed Meta Grid */
-            .prop-meta-grid { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 10px; }
+            .prop-meta-grid { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 11px; }
             .prop-meta-grid div { flex: 1; }
-            .prop-meta-label { font-weight: bold; color: #666; font-size: 8px; text-transform: uppercase; display: block; margin-bottom: 1px; }
-            .prop-meta-value { font-size: 12px; font-weight: bold; color: #111; }
+            .prop-meta-label { font-weight: bold; color: #666; font-size: 9px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+            .prop-meta-value { font-size: 14px; font-weight: bold; color: #111; }
             
-            .prop-summary-box { background-color: #f8f9fa; border: 1px solid #7cc243; padding: 6px; border-radius: 4px; margin-bottom: 10px; text-align: center; }
-            .prop-summary-box h2 { margin: 0; font-size: 14px; color: #1d2b1d; }
+            .prop-summary-box { background-color: #f8f9fa; border: 1px solid #7cc243; padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; }
+            .prop-summary-box h2 { margin: 0; font-size: 16px; color: #1d2b1d; }
             
-            /* --- ROCK SOLID SINGLE COLUMN SCOPE (Fixes iPad Safari page-break bug) --- */
-            .prop-scope-section { margin-bottom: 5px; }
-            .prop-scope-section h3 { border-bottom: 1px solid #ccc; padding-bottom: 2px; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase; }
+            /* Tightly Packed Scope Section to guarantee fitting on Page 1 */
+            .prop-scope-section { margin-bottom: 10px; }
+            .prop-scope-section h3 { border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 8px; color: #333; font-size: 13px; text-transform: uppercase; }
             
-            /* Standard block list ensures no weird iPad column fracturing */
-            #printScopeList { display: block; width: 100%; }
-            
+            /* Bulletproof Inline-Block 2-Column Grid */
+            #printScopeList { display: block; width: 100%; font-size: 0; }
             .print-scope-item { 
-                display: block; 
-                width: 100%;
-                box-sizing: border-box;
-                page-break-inside: avoid; 
-                margin-bottom: 6px; 
-                padding-left: 8px; 
-                border-left: 3px solid #7cc243; 
+                display: inline-block; vertical-align: top; width: 48%; margin-right: 4%; 
+                box-sizing: border-box; page-break-inside: avoid; break-inside: avoid;
+                margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #7cc243; font-size: 11px; 
             }
-            .print-scope-item h4 { margin: 0 0 1px 0; font-size: 11px; color: #000; font-weight: bold; }
-            .print-scope-item p { margin: 0; font-size: 9.5px; color: #444; line-height: 1.2; }
+            .print-scope-item:nth-child(even) { margin-right: 0; }
             
-            /* Compact Total Section */
-            .prop-total-section { text-align: right; margin-bottom: 15px; page-break-inside: avoid; border-top: 1px solid #eee; padding-top: 8px; }
-            .prop-total-label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-            .prop-total-value { font-size: 22px; font-weight: bold; color: #1d2b1d; display: inline-block; margin-top: 0px; min-width: 120px; }
+            .print-scope-item h4 { margin: 0 0 2px 0; font-size: 11.5px; color: #000; font-weight: bold; }
+            .print-scope-item p { margin: 0; font-size: 10px; color: #444; line-height: 1.25; }
             
-            /* Compact Signature Box */
-            .prop-signature-box { border: 1px solid #ccc; padding: 10px; border-radius: 6px; page-break-inside: avoid; background-color: #f8f9fa; }
-            .prop-signature-box h4 { margin: 0 0 2px 0; font-size: 11px; text-transform: uppercase; }
-            .prop-signature-box p { font-size: 8.5px; color: #555; margin: 0 0 20px 0; }
+            /* Total Section pinned to bottom of Page 1 */
+            .prop-total-section { text-align: right; margin-bottom: 0; border-top: 1px solid #eee; padding-top: 10px; page-break-inside: avoid; }
+            .prop-total-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+            .prop-total-value { font-size: 28px; font-weight: bold; color: #1d2b1d; display: inline-block; margin-top: 0px; min-width: 150px; }
+            
+            /* ======================================= */
+            /* PAGE 2: LEGAL TERMS & SIGNATURE         */
+            /* ======================================= */
+            .prop-terms-section { 
+                page-break-before: always; /* FORCES PAGE 2 */
+                break-before: page;
+                margin-top: 0; 
+                padding-top: 0; 
+                border-top: none; 
+            }
+            .prop-terms-section h3 { margin: 0 0 5px 0; font-size: 16px; color: #1d2b1d; text-transform: uppercase; border-bottom: 2px solid #1d2b1d; padding-bottom: 6px; }
+            .terms-intro { font-size: 11px; color: #555; margin: 0 0 15px 0; font-style: italic; }
+            
+            /* Bulletproof Inline-Block 2-Column Grid for Terms */
+            .terms-grid { display: block; width: 100%; font-size: 0; }
+            .terms-col { 
+                display: inline-block; vertical-align: top; width: 48%; margin-right: 4%; 
+                box-sizing: border-box; font-size: 11px; 
+            }
+            .terms-col:last-child { margin-right: 0; }
+
+            .terms-col h4 { margin: 0 0 6px 0; font-size: 12px; color: #7cc243; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+            .terms-col p { margin: 0 0 6px 0; font-size: 10.5px; color: #333; line-height: 1.4; }
+            .terms-col ul { margin: 0 0 15px 0; padding-left: 18px; font-size: 10.5px; color: #333; line-height: 1.4; }
+            .terms-col li { margin-bottom: 4px; }
+            .terms-col em { font-size: 10px; color: #666; display: block; margin-bottom: 20px; font-style: italic; }
+
+            /* Signature Box fits nicely at bottom of Page 2 */
+            .prop-signature-box { border: 1px solid #ccc; padding: 20px; border-radius: 6px; margin-top: 30px; page-break-inside: avoid; background-color: #f8f9fa; }
+            .prop-signature-box h4 { margin: 0 0 6px 0; font-size: 14px; text-transform: uppercase; color: #1d2b1d; }
+            .prop-signature-box p { font-size: 11px; color: #555; margin: 0 0 35px 0; line-height: 1.4; }
             .sig-lines { display: flex; justify-content: space-between; }
-            .sig-line { border-top: 1px solid #000; width: 45%; padding-top: 3px; font-size: 9px; color: #222; font-weight: bold; }
+            .sig-line { border-top: 1px solid #000; width: 45%; padding-top: 6px; font-size: 12px; color: #222; font-weight: bold; }
         }
 
         /* --- MOBILE SCREEN LAYOUT --- */
@@ -283,10 +303,11 @@
     </div>
 
     <div id="printProposal">
+        
         <div class="prop-header">
             <div class="prop-header-content">
                 <div class="brand-logo-container">
-                    <svg width="45" height="45" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <path d="M 45 20 L 85 20 L 85 80 L 45 80" fill="none" stroke="#7cc243" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
                         <polygon points="15,5 45,20 45,80 15,95" fill="#7cc243" />
                         <circle cx="36" cy="50" r="3" fill="#ffffff" />
@@ -339,19 +360,78 @@
             <span class="prop-total-value" id="printGrandTotal">$0.00</span>
         </div>
 
-        <div class="prop-signature-box">
-            <h4>Acceptance of Proposal</h4>
-            <p>The above prices, specifications, and conditions are satisfactory and are hereby accepted. SimplyDoors is authorized to do the work as specified.</p>
-            <div class="sig-lines">
-                <div class="sig-line">Customer Signature</div>
-                <div class="sig-line" style="width: 30%;">Date</div>
+        <div class="prop-terms-section">
+            <h3>SimplyDoors Window Installation Terms & Conditions</h3>
+            <p class="terms-intro">These terms supplement and govern the installation services described in this proposal.</p>
+            
+            <div class="terms-grid">
+                <div class="terms-col">
+                    <h4>1. Customer Responsibilities</h4>
+                    <ul>
+                        <li>Provide clear, safe access to each window opening.</li>
+                        <li>Remove blinds, curtains, shutters, window coverings, furniture, décor, or personal items within 6 feet of each opening.</li>
+                        <li>Ensure pets are secured and alarms/contacts are disabled before installation.</li>
+                        <li>Ensure windows are on-site and accessible if sourced by Customer.</li>
+                    </ul>
+                    <em>*Failure to meet readiness requirements may result in additional labor charges.</em>
+
+                    <h4>2. Hidden Conditions & Additional Work</h4>
+                    <p>SimplyDoors is not responsible for concealed damage discovered during removal, including:</p>
+                    <ul>
+                        <li>Water intrusion, rot or mold.</li>
+                        <li>Structural issues or framing inconsistencies.</li>
+                        <li>Pest damage.</li>
+                        <li>Electrical, plumbing, or mechanical interference.</li>
+                        <li>Out-of-square or non-standard openings.</li>
+                    </ul>
+                    <em>*Required corrective work will be billed as a change order at: $100/hr per installer + materials.</em>
+                </div>
+
+                <div class="terms-col">
+                    <h4>3. Exclusions</h4>
+                    <p>Unless explicitly listed in this proposal, the following are not included:</p>
+                    <ul>
+                        <li>Stucco patching or texture matching.</li>
+                        <li>Drywall repair or painting.</li>
+                        <li>Tile/stone repair or replacement.</li>
+                        <li>Interior trim repair or replacement.</li>
+                        <li>Reframing or structural modifications.</li>
+                        <li>Interior finish work (paint, stain, touch-ups).</li>
+                        <li>Remediation of mold, rot, or pests.</li>
+                        <li>Lead or asbestos abatement.</li>
+                    </ul>
+
+                    <h4>4. Warranty</h4>
+                    <ul>
+                        <li>Installation workmanship is warranted for 1 year from completion.</li>
+                        <li>Warranty excludes: Damage caused by settling, movement, misuse, or lack of maintenance.</li>
+                        <li>Caulking/sealant failure beyond 1 year is excluded (industry-standard maintenance item).</li>
+                        <li>Product warranties are provided directly by the manufacturer.</li>
+                    </ul>
+
+                    <h4>5. Dispute Window</h4>
+                    <p style="margin-bottom: 12px;">Customer must report installation concerns within 3 business days of completion.</p>
+
+                    <h4>6. Limitation of Liability</h4>
+                    <p>The Company’s maximum liability is limited to the cost of installation services provided. Indirect, incidental, or consequential damages are excluded.</p>
+                </div>
+            </div>
+            
+            <div class="prop-signature-box">
+                <h4>Acceptance of Proposal</h4>
+                <p>The Customer acknowledges that they have reviewed and accept the scope of work, agree to the Terms and Conditions attached to this proposal, and hereby authorize SimplyDoors to perform the installation services described.</p>
+                <div class="sig-lines">
+                    <div class="sig-line">Customer Signature</div>
+                    <div class="sig-line" style="width: 30%;">Date</div>
+                </div>
             </div>
         </div>
+
     </div>
 </div>
 
 <script>
-    // FIXED: Format local date string explicitly to avoid UTC timezone jumping to the next day
+    // Format local date string explicitly
     const today = new Date();
     const localDateStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('quoteDate').value = localDateStr;
@@ -373,7 +453,6 @@
             id: 2, item: "Cutback Stucco", pS: 90, pM: 140, pL: 200, type: "standard",
             desc: "Cutting and removing stucco around the window perimeter to allow for full-frame replacement or access to structural components. Patching/reapplying stucco is not included unless otherwise specified."
         },
-        // FIXED: Re-priced Large Caulk to $20 to natively account for the 2-tube requirement
         { 
             id: 6, item: "Caulk Interior", pS: 10, pM: 10, pL: 20, type: "auto_item", dependsOn: 1, hidden: true,
             desc: "Application of interior-grade caulking or sealant around casing and trim to create a clean finish and reduce air leakage. Does not include painting unless specified." 
@@ -493,35 +572,30 @@
             </td>
             <td class="row-total" id="caulkTotalSummary">$0.00</td>
         `;
-        // Insert right after the Cutback Stucco (which is the 3rd visual row)
+        // Insert right after the Cutback Stucco
         tbody.insertBefore(caulkTr, tbody.children[3]);
         
         calculateTotals();
     }
 
-    // Ensures the Print Layout is populated properly before browser grabs the screenshot
+    // Prepare print data BEFORE launching dialog
     window.addEventListener('beforeprint', preparePrint);
 
     function preparePrint() {
-        // Sync Customer Data
         document.getElementById('printName').innerText = document.getElementById('custName').value || '_______________________';
         document.getElementById('printAddress').innerText = document.getElementById('custAddress').value || '_______________________';
         
-        // Format printed date safely
         const dateParts = document.getElementById('quoteDate').value.split('-');
         if(dateParts.length === 3) {
             document.getElementById('printDate').innerText = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
         }
 
-        // Calculate Total Windows safely based on Install row (id 5)
         const newWinQ = quantities[5];
         const totalWindows = newWinQ ? (newWinQ.s + newWinQ.m + newWinQ.l) : 0;
         document.getElementById('printSummaryText').innerText = `Proposal for the installation of ${totalWindows} window(s)`;
 
-        // Sync Grand Total
         document.getElementById('printGrandTotal').innerText = document.getElementById('grandTotal').innerText;
 
-        // Build Clean Single-Column Scope List
         const printScopeList = document.getElementById('printScopeList');
         printScopeList.innerHTML = ''; 
         
