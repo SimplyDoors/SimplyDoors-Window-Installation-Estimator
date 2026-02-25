@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SimplyDoors - Installation Estimator</title>
     <style>
-        /* --- BASE & SCREEN STYLES --- */
+        /* --- BRAND COLORS & BASE STYLES --- */
+        :root {
+            --brand-green: #7cc243;
+            --brand-green-hover: #68a536;
+            --brand-dark: #1d2b1d;
+            --brand-light: #f6fbf2;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f0f2f5;
@@ -23,17 +30,26 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         
+        /* --- SCREEN CALCULATOR INTERFACE --- */
         .app-header {
             text-align: center;
-            border-bottom: 2px solid #0056b3;
-            padding-bottom: 10px;
+            border-bottom: 2px solid var(--brand-green);
+            padding-bottom: 15px;
             margin-bottom: 20px;
         }
+        .app-header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
         h1 {
-            color: #0056b3;
-            margin: 0 0 5px 0;
-            font-size: 2em;
+            color: var(--brand-dark);
+            margin: 0;
+            font-size: 2.2em;
             letter-spacing: -0.5px;
+            font-weight: 800;
         }
         .header-subtext {
             color: #666;
@@ -56,7 +72,7 @@
         .info-group { flex: 1; min-width: 200px; }
         .info-group label { display: block; font-weight: bold; font-size: 0.85em; color: #555; margin-bottom: 6px; text-transform: uppercase; }
         .info-group input { width: 100%; padding: 12px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; transition: border-color 0.2s; }
-        .info-group input:focus { border-color: #0056b3; outline: none; }
+        .info-group input:focus { border-color: var(--brand-green); outline: none; }
         
         table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 10px; }
         th, td { border: 1px solid #dee2e6; padding: 15px 10px; text-align: left; vertical-align: middle; }
@@ -69,33 +85,34 @@
             border-left: none; border-right: none; border-radius: 0; text-align: center;
             font-size: 18px; font-weight: bold; padding: 0; margin: 0; background: #fff; color: #333;
         }
-        input[type="number"]:focus { outline: none; background: #eef6ff; }
+        input[type="number"]:focus { outline: none; background: var(--brand-light); }
 
         .qty-control { display: inline-flex; align-items: center; vertical-align: middle; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 6px; }
         .qty-btn {
-            width: 44px; height: 48px; background-color: #0056b3; color: white; border: none;
+            width: 44px; height: 48px; background-color: var(--brand-green); color: white; border: none;
             font-size: 24px; font-weight: bold; cursor: pointer; display: flex; align-items: center;
             justify-content: center; user-select: none; transition: background-color 0.1s;
         }
-        .qty-btn:active { background-color: #004085; }
+        .qty-btn:active { background-color: var(--brand-green-hover); }
         .qty-btn-minus { border-radius: 6px 0 0 6px; }
         .qty-btn-plus { border-radius: 0 6px 6px 0; }
 
         .price-calc { display: inline-block; color: #555; white-space: nowrap; vertical-align: middle; margin-left: 12px; font-size: 0.95em; }
-        .price-calc b { color: #0056b3; display: inline-block; min-width: 50px; font-size: 1.1em; }
+        .price-calc b { color: var(--brand-dark); display: inline-block; min-width: 50px; font-size: 1.1em; }
 
         .toggle-label {
             display: inline-flex; align-items: center; background: #fff; padding: 12px 20px;
-            border-radius: 8px; cursor: pointer; margin-top: 5px; border: 2px solid #ccc; user-select: none; font-size: 1.05em; transition: all 0.2s;
+            border-radius: 8px; cursor: pointer; margin-top: 0; border: 2px solid #ccc; user-select: none; font-size: 1.05em; transition: all 0.2s;
         }
-        .toggle-label input[type="checkbox"] { width: 24px; height: 24px; margin-right: 12px; cursor: pointer; }
-        .toggle-label:has(input:checked) { background: #eef6ff; border-color: #0056b3; }
+        .toggle-label input[type="checkbox"] { width: 24px; height: 24px; margin-right: 12px; cursor: pointer; accent-color: var(--brand-green); }
+        .toggle-label:has(input:checked) { background: var(--brand-light); border-color: var(--brand-green); }
 
-        .row-total { font-weight: bold; background-color: #f8f9fa; font-size: 1.15em; text-align: right; color: #111; }
+        .row-total { font-weight: bold; background-color: #f8f9fa; font-size: 1.15em; text-align: right; color: var(--brand-dark); }
 
+        /* FIXED: Removed the extra $ sign from HTML to prevent $$ */
         .grand-total-container {
             margin-top: 25px; text-align: center; font-size: 2em; font-weight: bold;
-            background-color: #eef6ff; padding: 25px; border-radius: 8px; border: 2px solid #b6d4fe; color: #004085;
+            background-color: var(--brand-light); padding: 25px; border-radius: 8px; border: 2px solid var(--brand-green); color: var(--brand-dark);
         }
         
         .multiplier-row { background-color: #fffdf0; }
@@ -105,79 +122,93 @@
         
         .mobile-label { display: none; }
         
+        .multiplier-controls { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .percent-input-wrapper { display: flex; align-items: center; background: #fff; padding: 6px 12px; border-radius: 8px; border: 2px solid #ccc; font-weight: bold; }
+        .percent-input-wrapper input { width: 55px; height: 34px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 18px; margin-right: 5px; font-weight: bold;}
+        .percent-input-wrapper input:focus { border-color: var(--brand-green); outline: none; background: var(--brand-light); }
+
         .action-buttons { display: flex; gap: 15px; margin-top: 25px; }
         .btn {
             flex: 1; padding: 16px; font-size: 1.2em; font-weight: bold; text-align: center;
             border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; transition: transform 0.1s, box-shadow 0.1s;
         }
         .btn:active { transform: translateY(2px); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .btn-print { background-color: #198754; }
+        .btn-print { background-color: var(--brand-green); color: var(--brand-dark); font-weight: 800; }
         .btn-reset { background-color: #dc3545; }
 
-        /* --- ONE-PAGE PRINT PROPOSAL LAYOUT --- */
+        /* --- ONE-PAGE BRANDED PRINT PROPOSAL LAYOUT --- */
         #printProposal { display: none; }
         
         @media print {
-            @page { margin: 0.35in; size: letter portrait; }
+            /* Extremely tight margins to ensure everything stays on 1 page */
+            @page { margin: 0.25in; size: letter portrait; }
             
             body { 
                 background-color: white; 
                 padding: 0; 
                 font-size: 11px; 
                 color: #000; 
-                line-height: 1.3; 
+                line-height: 1.2; 
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important; 
             }
             .container { box-shadow: none; max-width: 100%; padding: 0; margin: 0; }
             
-            /* Hide the entire calculator UI */
+            /* Hide UI completely */
             .app-header, .customer-info, #estimatorTable, .grand-total-container, .action-buttons { display: none !important; }
             
-            /* Show Proposal */
+            /* Show Formal Proposal */
             #printProposal { display: block; width: 100%; }
             
-            .prop-header { border-bottom: 2px solid #0056b3; padding-bottom: 5px; margin-bottom: 15px; }
-            .prop-header h1 { color: #0056b3; margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-            .prop-header p { margin: 2px 0 0 0; color: #555; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+            /* Tightly packed Header */
+            .prop-header { margin-bottom: 5px; border-bottom: 2px solid #7cc243; padding-bottom: 5px; }
+            .prop-header-content { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+            .brand-logo-container { display: flex; align-items: center; gap: 8px; }
+            .brand-text h1 { color: #1d2b1d; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+            .brand-text p { color: #1d2b1d; margin: 0; font-size: 10px; letter-spacing: 0.5px; font-weight: 600; text-transform: uppercase; }
+            .company-contact { text-align: right; font-size: 9px; color: #444; line-height: 1.3; }
+            .proposal-title-bar { padding-top: 2px; }
+            .proposal-title-bar h2 { margin: 0; font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 2px; }
             
-            .prop-meta-grid { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 11px; }
+            /* Tightly packed Meta Grid */
+            .prop-meta-grid { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 10px; }
             .prop-meta-grid div { flex: 1; }
-            .prop-meta-label { font-weight: bold; color: #666; font-size: 9px; text-transform: uppercase; display: block; margin-bottom: 2px; }
-            .prop-meta-value { font-size: 14px; font-weight: bold; color: #111; }
+            .prop-meta-label { font-weight: bold; color: #666; font-size: 8px; text-transform: uppercase; display: block; margin-bottom: 1px; }
+            .prop-meta-value { font-size: 12px; font-weight: bold; color: #111; }
             
-            .prop-summary-box { background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; }
-            .prop-summary-box h2 { margin: 0; font-size: 16px; color: #0056b3; }
+            .prop-summary-box { background-color: #f8f9fa; border: 1px solid #7cc243; padding: 6px; border-radius: 4px; margin-bottom: 10px; text-align: center; }
+            .prop-summary-box h2 { margin: 0; font-size: 14px; color: #1d2b1d; }
             
-            /* --- GUARANTEED 1-PAGE 2-COLUMN SCOPE --- */
-            .prop-scope-section { margin-bottom: 15px; }
-            .prop-scope-section h3 { border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 10px; color: #333; font-size: 14px; text-transform: uppercase; }
+            /* --- ROCK SOLID SINGLE COLUMN SCOPE (Fixes iPad Safari page-break bug) --- */
+            .prop-scope-section { margin-bottom: 5px; }
+            .prop-scope-section h3 { border-bottom: 1px solid #ccc; padding-bottom: 2px; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase; }
             
-            #printScopeList { 
-                column-count: 2; 
-                column-gap: 25px; 
-                width: 100%;
-            }
+            /* Standard block list ensures no weird iPad column fracturing */
+            #printScopeList { display: block; width: 100%; }
             
             .print-scope-item { 
-                break-inside: avoid-column; 
+                display: block; 
+                width: 100%;
+                box-sizing: border-box;
                 page-break-inside: avoid; 
-                margin-bottom: 12px; 
-                padding-left: 10px; 
-                border-left: 3px solid #0056b3; 
+                margin-bottom: 6px; 
+                padding-left: 8px; 
+                border-left: 3px solid #7cc243; 
             }
-            .print-scope-item h4 { margin: 0 0 3px 0; font-size: 12px; color: #000; font-weight: bold; }
-            .print-scope-item p { margin: 0; font-size: 10.5px; color: #444; }
+            .print-scope-item h4 { margin: 0 0 1px 0; font-size: 11px; color: #000; font-weight: bold; }
+            .print-scope-item p { margin: 0; font-size: 9.5px; color: #444; line-height: 1.2; }
             
-            .prop-total-section { text-align: right; margin-bottom: 30px; page-break-inside: avoid; border-top: 1px solid #eee; padding-top: 15px; }
-            .prop-total-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-            .prop-total-value { font-size: 28px; font-weight: bold; color: #000; display: inline-block; margin-top: 0px; min-width: 150px; }
+            /* Compact Total Section */
+            .prop-total-section { text-align: right; margin-bottom: 15px; page-break-inside: avoid; border-top: 1px solid #eee; padding-top: 8px; }
+            .prop-total-label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+            .prop-total-value { font-size: 22px; font-weight: bold; color: #1d2b1d; display: inline-block; margin-top: 0px; min-width: 120px; }
             
-            .prop-signature-box { border: 1px solid #ccc; padding: 15px; border-radius: 6px; page-break-inside: avoid; background-color: #f8f9fa; }
-            .prop-signature-box h4 { margin: 0 0 5px 0; font-size: 13px; text-transform: uppercase; }
-            .prop-signature-box p { font-size: 10px; color: #555; margin: 0 0 35px 0; }
+            /* Compact Signature Box */
+            .prop-signature-box { border: 1px solid #ccc; padding: 10px; border-radius: 6px; page-break-inside: avoid; background-color: #f8f9fa; }
+            .prop-signature-box h4 { margin: 0 0 2px 0; font-size: 11px; text-transform: uppercase; }
+            .prop-signature-box p { font-size: 8.5px; color: #555; margin: 0 0 20px 0; }
             .sig-lines { display: flex; justify-content: space-between; }
-            .sig-line { border-top: 1px solid #000; width: 45%; padding-top: 4px; font-size: 11px; color: #222; font-weight: bold; }
+            .sig-line { border-top: 1px solid #000; width: 45%; padding-top: 3px; font-size: 9px; color: #222; font-weight: bold; }
         }
 
         /* --- MOBILE SCREEN LAYOUT --- */
@@ -202,7 +233,14 @@
 
 <div class="container">
     <div class="app-header">
-        <h1>SimplyDoors</h1>
+        <div class="app-header-title">
+            <svg width="45" height="45" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 45 20 L 85 20 L 85 80 L 45 80" fill="none" stroke="#7cc243" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                <polygon points="15,5 45,20 45,80 15,95" fill="#7cc243" />
+                <circle cx="36" cy="50" r="3" fill="#ffffff" />
+            </svg>
+            <h1>SimplyDoors</h1>
+        </div>
         <div class="header-subtext">Internal Estimation Tool</div>
     </div>
 
@@ -236,18 +274,39 @@
     </table>
 
     <div class="grand-total-container">
-        Grand Total: <br>$<span id="grandTotal">0.00</span>
+        Grand Total: <br><span id="grandTotal">$0.00</span>
     </div>
 
     <div class="action-buttons">
-        <button class="btn btn-print" onclick="preparePrint(); window.print()">Save / Print Proposal</button>
+        <button class="btn btn-print" onclick="triggerPrint()">Save / Print Proposal</button>
         <button class="btn btn-reset" onclick="resetCalculator()">Clear Calculator</button>
     </div>
 
     <div id="printProposal">
         <div class="prop-header">
-            <h1>SimplyDoors</h1>
-            <p>Official Installation Proposal</p>
+            <div class="prop-header-content">
+                <div class="brand-logo-container">
+                    <svg width="45" height="45" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 45 20 L 85 20 L 85 80 L 45 80" fill="none" stroke="#7cc243" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                        <polygon points="15,5 45,20 45,80 15,95" fill="#7cc243" />
+                        <circle cx="36" cy="50" r="3" fill="#ffffff" />
+                    </svg>
+                    <div class="brand-text">
+                        <h1>SimplyDoors</h1>
+                        <p>New Doors, Made Easy</p>
+                    </div>
+                </div>
+                <div class="company-contact">
+                    <strong>17750 Lookout Rd Suite 150</strong><br>
+                    Selma, TX 78154<br>
+                    Phone: 210-903-8450<br>
+                    sales@SimplyDoors.com<br>
+                    simplydoors.com
+                </div>
+            </div>
+            <div class="proposal-title-bar">
+                <h2>Official Installation Proposal</h2>
+            </div>
         </div>
 
         <div class="prop-meta-grid">
@@ -292,57 +351,64 @@
 </div>
 
 <script>
-    // Initialize date to today
-    document.getElementById('quoteDate').valueAsDate = new Date();
+    // FIXED: Format local date string explicitly to avoid UTC timezone jumping to the next day
+    const today = new Date();
+    const localDateStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    document.getElementById('quoteDate').value = localDateStr;
+
+    function formatMoney(amount) {
+        return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
     const pricingData = [
         { 
-            id: 2, item: "New Window Installation", pS: 90, pM: 150, pL: 200, type: "standard",
-            desc: "Placement, leveling, shimming, fastening, and securing the new window unit per manufacturer guidelines and local building standards. Includes proper insulation and water-seal preparation prior to interior/exterior finishing."
+            id: 5, item: "Install New Windows", pS: 90, pM: 150, pL: 200, type: "standard",
+            desc: "Placement, leveling, shimming, fastening, and securing the new window unit per manufacturer guidelines and local building standards. Includes proper insulation and water-seal preparation prior to interior/exterior finishing. Components such as sill pan, flashing tape, and caulking will be installed as needed dependent on the approved installation method."
         },
         { 
-            id: 1, item: "Remove existing window", pS: 70, pM: 125, pL: 180, type: "standard",
-            desc: "Includes the careful removal of the existing window sash, frame, trim, and related components as needed for the approved installation method. Protects surrounding finishes where possible. Does not include repair of concealed damage unless noted elsewhere."
+            id: 1, item: "Remove Existing Windows", pS: 70, pM: 125, pL: 180, type: "standard",
+            desc: "Includes the removal of the existing window sash, frame, trim, and related components as needed for the approved installation method. Does not include repair of concealed damage unless noted elsewhere."
         },
         { 
-            id: 3, item: "Stucco cutback", pS: 90, pM: 140, pL: 200, type: "standard",
-            desc: "Cutting and removing stucco around the window perimeter to allow for full-frame replacement or access to structural components. Includes precise saw-cutting to minimize cracking and preparing edges for patching (patching itself is separate unless specified)."
+            id: 2, item: "Cutback Stucco", pS: 90, pM: 140, pL: 200, type: "standard",
+            desc: "Cutting and removing stucco around the window perimeter to allow for full-frame replacement or access to structural components. Patching/reapplying stucco is not included unless otherwise specified."
         },
+        // FIXED: Re-priced Large Caulk to $20 to natively account for the 2-tube requirement
         { 
-            id: 5, item: "Interior Caulk", pS: 10, pM: 10, pL: 10, type: "auto_item", dependsOn: 1, hidden: true,
+            id: 6, item: "Caulk Interior", pS: 10, pM: 10, pL: 20, type: "auto_item", dependsOn: 1, hidden: true,
             desc: "Application of interior-grade caulking or sealant around casing and trim to create a clean finish and reduce air leakage. Does not include painting unless specified." 
         },
         { 
-            id: 6, item: "Exterior Caulk", pS: 10, pM: 10, pL: 10, type: "auto_item", dependsOn: 1, hidden: true,
+            id: 7, item: "Caulk Exterior", pS: 10, pM: 10, pL: 20, type: "auto_item", dependsOn: 1, hidden: true,
             desc: "Weather-grade exterior caulking of perimeter joints to seal against water and air infiltration. Color matching provided where available. Does not include repainting of adjacent surfaces unless otherwise listed." 
         },
         { 
-            id: 7, item: "Sheetrock/Wood Return Cutback", pS: 40, pM: 60, pL: 80, type: "standard",
+            id: 3, item: "Cutback Sheetrock Or Wood Returns", pS: 40, pM: 60, pL: 80, type: "standard",
             desc: "Removal or trimming of interior drywall or wood return extensions to allow the new window to fit properly within the opening. Prepares the area for reinstall or replacement of returns (return rebuild is separate unless listed)."
         },
         { 
-            id: 8, item: "Tile/Stone Return Cutback", pS: 80, pM: 120, pL: 160, type: "standard",
+            id: 4, item: "Cutback Tile Or Stone Returns", pS: 80, pM: 120, pL: 160, type: "standard",
             desc: "Precision cutting and removal of tile or stone at the window return area to allow installation access. This may involve specialty tools and dust management. Tile/stone repair or replacement is not included unless noted."
         },
         { 
-            id: 9, item: "Exterior Trim", pS: 40, pM: 60, pL: 80, type: "standard",
+            id: 8, item: "Apply Exterior Trim", pS: 40, pM: 60, pL: 80, type: "standard",
             desc: "Installation of new exterior trim components such as brick mold, PVC trim, or wood trim depending on the scope. Includes cutting, fastening, and prepping joints for caulk. Painting or staining is excluded unless specified."
         },
         { 
-            id: 10, item: "Floor/furniture protection", multS: 0.15, type: "multiplier", range: [1,2,3,5,6,7,8,9],
-            desc: "Additional time and protective measures required when working in an occupied home. Includes floor protection, covering furniture, daily cleanup, noise and dust management, and accommodating homeowner schedule constraints."
+            id: 11, item: "Working In Lived In Home", type: "multiplier_input", defaultPercent: 15, range: [1, 2, 3, 4, 5, 6, 7, 8],
+            desc: "Additional time and protective measures required when working in an occupied home. Includes daily cleanup, noise and dust management, and accommodating homeowner schedule constraints."
         },
         { 
-            id: 11, item: "Debris haul-off", pS: 10, pM: 15, pL: 20, type: "item_toggle", dependsOn: 2,
-            desc: "Collection, loading, and disposal of construction debris generated by window removal and installation. Includes responsible disposal of glass, wood, and packaging materials. Does not include whole-house junk removal."
+            id: 10, item: "Haul Away Debris", pS: 10, pM: 15, pL: 20, type: "item_toggle", dependsOn: 5,
+            desc: "Collection, loading, and disposal of construction debris generated by window removal and installation. Includes disposal of glass, wood, and packaging materials. Does not include whole-house junk removal."
         },
         { 
-            id: 12, item: "Scaffolding Required", pS: 30, pM: 30, pL: 50, type: "item_toggle", dependsOn: 2,
-            desc: "Transporting, assembling, securing, and dismantling scaffolding required to access elevated window openings. Includes compliance with OSHA safety standards and jobsite-specific access requirements."
+            id: 9, item: "Setting Up/Taking Down Scaffolding", pS: 30, pM: 30, pL: 50, type: "item_toggle", dependsOn: 5,
+            desc: "Transporting, assembling, securing, and dismantling scaffolding required to access elevated window openings."
         },
         { 
-            id: 13, item: "Limited site access", multS: 0.10, type: "multiplier", range: [1,2,3,5,6,7,8,9,10,11,12],
-            desc: "Additional labor required due to restricted access such as long carries, tight stairways, limited parking, uneven terrain, locked or gated areas, or inability to stage materials near the work area. Adds time to both removal and installation activities."
+            id: 12, item: "Site Access Limited", type: "multiplier_input", defaultPercent: 10, range: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            desc: "Additional time required due to restricted access such as long carries, tight stairways, limited parking, uneven terrain, locked or gated areas, or inability to stage materials near the work area. Adds time to both removal and installation activities."
         }
     ];
 
@@ -353,12 +419,12 @@
         tbody.innerHTML = ''; 
         
         pricingData.forEach(row => {
-            quantities[row.id] = { s: 0, m: 0, l: 0, checked: false };
+            quantities[row.id] = { s: 0, m: 0, l: 0, checked: false, percent: row.defaultPercent || 0 };
             if (row.hidden) return; 
 
             const tr = document.createElement('tr');
             let inputHtml = '';
-            let itemHtml = `<strong style="font-size: 1.05em; color: #111;">${row.item}</strong>`;
+            let itemHtml = `<strong style="font-size: 1.05em; color: var(--brand-dark);">${row.item}</strong>`;
 
             if (row.type === 'standard') {
                 const sizes = [
@@ -391,14 +457,20 @@
                         </label>
                     </td>
                 `;
-            } else if (row.type === 'multiplier') {
+            } else if (row.type === 'multiplier_input') {
                 tr.classList.add('multiplier-row');
                 inputHtml = `
                     <td colspan="3" style="text-align: center;">
-                        <label class="toggle-label">
-                            <input type="checkbox" onchange="updateToggle(${row.id}, this.checked)">
-                            <strong>Apply ${Math.round(row.multS * 100)}% Surcharge</strong> 
-                        </label>
+                        <div class="multiplier-controls">
+                            <label class="toggle-label" style="margin-top: 0;">
+                                <input type="checkbox" onchange="updateToggle(${row.id}, this.checked)">
+                                <strong>Apply Surcharge</strong> 
+                            </label>
+                            <div class="percent-input-wrapper">
+                                <input type="number" id="input-${row.id}-percent" value="${row.defaultPercent}" min="0" onfocus="this.select()" onchange="updateMultiplier(${row.id}, this.value)">
+                                <span>%</span>
+                            </div>
+                        </div>
                     </td>
                 `;
             }
@@ -417,38 +489,39 @@
         caulkTr.classList.add('auto-row', 'caulk-summary-row');
         caulkTr.innerHTML = `
             <td colspan="4" style="text-align: left; color: #333;">
-                <strong style="font-size: 1.05em; color: #111;">Interior & Exterior Caulk</strong> <small style="color: #666;">(Auto-calculated from Removal count)</small>
+                <strong style="font-size: 1.05em; color: var(--brand-dark);">Caulk Interior & Exterior</strong> <small style="color: #666;">(Auto-calculated from Removal count)</small>
             </td>
             <td class="row-total" id="caulkTotalSummary">$0.00</td>
         `;
-        tbody.appendChild(caulkTr);
+        // Insert right after the Cutback Stucco (which is the 3rd visual row)
+        tbody.insertBefore(caulkTr, tbody.children[3]);
         
         calculateTotals();
     }
 
-    // Ensures the Print Layout is generated even if the user hits Ctrl+P natively
+    // Ensures the Print Layout is populated properly before browser grabs the screenshot
     window.addEventListener('beforeprint', preparePrint);
 
     function preparePrint() {
-        // Sync Data
+        // Sync Customer Data
         document.getElementById('printName').innerText = document.getElementById('custName').value || '_______________________';
         document.getElementById('printAddress').innerText = document.getElementById('custAddress').value || '_______________________';
         
-        const dateObj = new Date(document.getElementById('quoteDate').value);
-        if(!isNaN(dateObj)) {
-            dateObj.setMinutes(dateObj.getMinutes() + dateObj.getTimezoneOffset());
-            document.getElementById('printDate').innerText = dateObj.toLocaleDateString();
+        // Format printed date safely
+        const dateParts = document.getElementById('quoteDate').value.split('-');
+        if(dateParts.length === 3) {
+            document.getElementById('printDate').innerText = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
         }
 
-        // Count Windows
-        const newWinQ = quantities[2];
-        const totalWindows = newWinQ.s + newWinQ.m + newWinQ.l;
+        // Calculate Total Windows safely based on Install row (id 5)
+        const newWinQ = quantities[5];
+        const totalWindows = newWinQ ? (newWinQ.s + newWinQ.m + newWinQ.l) : 0;
         document.getElementById('printSummaryText').innerText = `Proposal for the installation of ${totalWindows} window(s)`;
 
-        // Sync Total
-        document.getElementById('printGrandTotal').innerText = '$' + document.getElementById('grandTotal').innerText;
+        // Sync Grand Total
+        document.getElementById('printGrandTotal').innerText = document.getElementById('grandTotal').innerText;
 
-        // Build Multi-Column Scope List
+        // Build Clean Single-Column Scope List
         const printScopeList = document.getElementById('printScopeList');
         printScopeList.innerHTML = ''; 
         
@@ -462,8 +535,8 @@
                 if (targetQ && (targetQ.s > 0 || targetQ.m > 0 || targetQ.l > 0)) {
                     isSelected = true;
                 }
-            } else if (row.type === 'item_toggle' || row.type === 'multiplier') {
-                if (quantities[row.id].checked) {
+            } else if (row.type === 'item_toggle' || row.type === 'multiplier_input') {
+                if (quantities[row.id] && quantities[row.id].checked) {
                     isSelected = true;
                 }
             }
@@ -480,10 +553,18 @@
         });
 
         if (!hasItems) {
-            printScopeList.innerHTML = `<p style="color: #666; font-style: italic; column-span: all;">No specific installation services selected.</p>`;
+            printScopeList.innerHTML = `<p style="color: #666; font-style: italic; width: 100%; font-size: 12px;">No specific installation services selected.</p>`;
         }
     }
 
+    // Extended delay to guarantee iPad draws the DOM before printing
+    window.triggerPrint = function() {
+        preparePrint();
+        setTimeout(function() {
+            window.print();
+        }, 250); 
+    }
+    
     // Math & Interactions
     window.adjustQty = function(id, size, delta) {
         let currentVal = parseInt(quantities[id][size]) || 0;
@@ -505,12 +586,18 @@
         calculateTotals();
     }
 
+    window.updateMultiplier = function(id, val) {
+        quantities[id].percent = parseFloat(val) || 0;
+        calculateTotals();
+    }
+
     window.resetCalculator = function() {
         if(confirm("Are you sure you want to clear all fields and start a new quote?")) {
             init(); 
             document.getElementById('custName').value = '';
             document.getElementById('custAddress').value = '';
-            document.getElementById('quoteDate').valueAsDate = new Date();
+            const todayReset = new Date();
+            document.getElementById('quoteDate').value = todayReset.getFullYear() + '-' + String(todayReset.getMonth() + 1).padStart(2, '0') + '-' + String(todayReset.getDate()).padStart(2, '0');
             window.scrollTo(0, 0); 
         }
     }
@@ -519,6 +606,7 @@
         let grandTotal = 0;
         let rowTotals = {}; 
 
+        // Pass 1
         pricingData.forEach(row => {
             if (row.type === 'standard') {
                 const q = quantities[row.id];
@@ -527,12 +615,13 @@
                 const totalL = q.l * row.pL;
                 rowTotals[row.id] = totalS + totalM + totalL;
 
-                document.getElementById(`calc-${row.id}-s`).innerText = '$' + totalS.toFixed(2);
-                document.getElementById(`calc-${row.id}-m`).innerText = '$' + totalM.toFixed(2);
-                document.getElementById(`calc-${row.id}-l`).innerText = '$' + totalL.toFixed(2);
+                document.getElementById(`calc-${row.id}-s`).innerText = '$' + formatMoney(totalS);
+                document.getElementById(`calc-${row.id}-m`).innerText = '$' + formatMoney(totalM);
+                document.getElementById(`calc-${row.id}-l`).innerText = '$' + formatMoney(totalL);
             }
         });
 
+        // Pass 2
         pricingData.forEach(row => {
             if (row.type === 'item_toggle') {
                 if (quantities[row.id].checked) {
@@ -547,32 +636,34 @@
             }
         });
 
+        // Pass 3: Multipliers with dynamic inputs
         pricingData.forEach(row => {
-            if (row.type === 'multiplier') {
+            if (row.type === 'multiplier_input') {
                 if (quantities[row.id].checked) {
                     let rangeSum = 0;
                     row.range.forEach(rangeId => {
                         rangeSum += (rowTotals[rangeId] || 0);
                     });
-                    rowTotals[row.id] = rangeSum * row.multS;
+                    rowTotals[row.id] = rangeSum * (quantities[row.id].percent / 100);
                 } else {
                     rowTotals[row.id] = 0;
                 }
             }
         });
 
+        // Final Pass
         pricingData.forEach(row => {
             const finalValue = rowTotals[row.id] || 0;
             if (!row.hidden) {
-                document.getElementById(`total-${row.id}`).innerText = '$' + finalValue.toFixed(2);
+                document.getElementById(`total-${row.id}`).innerText = '$' + formatMoney(finalValue);
             }
             grandTotal += finalValue;
         });
 
-        let combinedCaulkTotal = (rowTotals[5] || 0) + (rowTotals[6] || 0);
-        document.getElementById('caulkTotalSummary').innerText = '$' + combinedCaulkTotal.toFixed(2);
+        let combinedCaulkTotal = (rowTotals[6] || 0) + (rowTotals[7] || 0);
+        document.getElementById('caulkTotalSummary').innerText = '$' + formatMoney(combinedCaulkTotal);
 
-        document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+        document.getElementById('grandTotal').innerText = '$' + formatMoney(grandTotal);
     }
 
     window.onload = init;
